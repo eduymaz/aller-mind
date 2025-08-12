@@ -1,0 +1,18 @@
+{
+    "Object": {
+        "Data": [
+            {
+                "ReadTime": "2025-08-02T15:00:00",
+                "Stationid": "00b1dcdb-702d-459b-8399-30548d8164ec",
+                "CO": null,
+                "NO": 9.75
+            },
+            {
+                "ReadTime": "2025-08-02T15:00:00",
+                "Stationid": "862bd2b3-3434-4a69-8b7a-1b9dccdec63c",
+                "CO": 2337.72,
+                "NO": 68.08
+            }
+        ]
+    }
+}
