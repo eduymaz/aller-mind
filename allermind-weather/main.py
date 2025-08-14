@@ -41,4 +41,4 @@ def run_all_cities(start_date: str, end_date: str, output_file: str = 'city_outp
             header_written = True
 
 if __name__ == "__main__":
-    run_all_cities(start_date="2025-08-07", end_date="2025-08-08")
+    run_all_cities(start_date="2024-08-01", end_date="2025-08-01")
