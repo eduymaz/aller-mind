@@ -7,7 +7,7 @@ import csv
 import os
 
 
-def run_all_cities(start_date: str, end_date: str, output_file: str = 'city_output.csv'):
+def run_all_cities(start_date: str, end_date: str, output_file: str = '15aug_city_output.csv'):
     # Dosya yollarını script'in bulunduğu dizinden al
     base_dir = os.path.dirname(os.path.abspath(__file__))
     city_csv = os.path.join(base_dir, 'city.csv')
@@ -41,4 +41,4 @@ def run_all_cities(start_date: str, end_date: str, output_file: str = 'city_outp
             header_written = True
 
 if __name__ == "__main__":
-    run_all_cities(start_date="2024-08-01", end_date="2025-08-01")
+    run_all_cities(start_date="2025-08-15", end_date="2025-08-15")
