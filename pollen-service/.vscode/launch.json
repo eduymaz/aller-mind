@@ -1,0 +1,30 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot Debug",
+            "request": "launch",
+            "mainClass": "com.allermind.pollen_service.PollenServiceApplication",
+            "projectName": "pollen-service",
+            "console": "internalConsole",
+            "stopOnEntry": false,
+            "preLaunchTask": "compile"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot Debug (No Compile)",
+            "request": "launch",
+            "mainClass": "com.allermind.pollen_service.PollenServiceApplication",
+            "projectName": "pollen-service",
+            "console": "internalConsole",
+            "stopOnEntry": false
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        }
+    ]
+}

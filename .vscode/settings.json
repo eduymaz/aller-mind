@@ -1,0 +1,11 @@
+{
+    "java.project.sourcePaths": [
+        "src/main/java",
+        "pollen-service/src/main/java/com/allermind/pollen_service"
+    ],
+    "java.compile.nullAnalysis.mode": "disabled",
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "maven.view": "flat",
+    "java.jdt.ls.java.home": "/opt/homebrew/opt/openjdk",
+    "maven.executable.path": "/opt/homebrew/bin/mvn"
+}

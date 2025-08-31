@@ -1,0 +1,6 @@
+{
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.debug.settings.enableRunDebugCodeLens": true,
+    "java.debug.settings.forceBuildBeforeRun": true,
+    "java.saveActions.organizeImports": true
+}
