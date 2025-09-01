@@ -176,18 +176,13 @@ demo.interactive_prediction()
 
 ## 📚 Dokümantasyon
 
-- **[Kullanım Kılavuzu](KULLANIM_KILAVUZU.md)**: Detaylı kullanım talimatları
-- **[Analiz Raporu](allergy_analysis_report.md)**: Kapsamlı analiz sonuçları
-- **[API Referansı](#api-kullanımı)**: Kod örnekleri ve fonksiyonlar
+- **[Kullanım Kılavuzu](https://github.com/eduymaz/aller-mind/blob/main/DATA/ML/KULLANIM_KILAVUZU.md)**: Detaylı kullanım talimatları
+- **[Analiz Raporu](https://github.com/eduymaz/aller-mind/blob/main/DATA/ML/allergy_analysis_report.md)**: Kapsamlı analiz sonuçları
 
 ## 🔮 Gelecek Geliştirmeler
 
-- [ ] Real-time API entegrasyonu
-- [ ] Mobil uygulama desteği
-- [ ] Kişisel profil öğrenmesi
 - [ ] Coğrafi mikro-iklim analizi
 - [ ] Wearable cihaz entegrasyonu
-- [ ] Makine öğrenmesi optimizasyonu
 
 ## 🤝 Katkıda Bulunma
 
@@ -203,9 +198,9 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICE
 
 ## 📞 İletişim
 
-- **Proje Sahibi**: AllerMind Ekibi
-- **E-posta**: support@allermind.com
-- **GitHub**: [GitHub Repository]
+- **Proje Sahibi**: Elif Duymaz Yilmaz
+- **E-posta**: duyymazelif@gmail.com
+- **GitHub**: [GitHub Repository](https://github.com/eduymaz/aller-mind/)
 
 ## 🙏 Teşekkürler
 
