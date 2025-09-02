@@ -1,0 +1,390 @@
+{
+  "random_forest": {
+    "1": {
+      "model_name": "Random Forest Regressor",
+      "algorithm": "random_forest",
+      "group_id": 1,
+      "r2_score": 0.9956185975651156,
+      "mse": 0.005153866671911495,
+      "mae": 0.009629187339420643,
+      "training_time": 0.140092134475708,
+      "cv_mean": 0.9984454548758996,
+      "cv_std": 0.0006985334117851185,
+      "cv_time": 0.6033406257629395,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Hızlı eğitim",
+        "Overfitting direnci",
+        "Feature importance"
+      ]
+    },
+    "2": {
+      "model_name": "Random Forest Regressor",
+      "algorithm": "random_forest",
+      "group_id": 2,
+      "r2_score": 0.9704759866350002,
+      "mse": 0.016508025081978968,
+      "mae": 0.016400758684188575,
+      "training_time": 0.1428840160369873,
+      "cv_mean": 0.9919365709008041,
+      "cv_std": 0.003704997657651453,
+      "cv_time": 0.590843915939331,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Hızlı eğitim",
+        "Overfitting direnci",
+        "Feature importance"
+      ]
+    },
+    "3": {
+      "model_name": "Random Forest Regressor",
+      "algorithm": "random_forest",
+      "group_id": 3,
+      "r2_score": 0.995065881120971,
+      "mse": 0.003268017417182221,
+      "mae": 0.023739814834254087,
+      "training_time": 0.11406588554382324,
+      "cv_mean": 0.9967801960390663,
+      "cv_std": 0.0004540453916088924,
+      "cv_time": 0.601628303527832,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Hızlı eğitim",
+        "Overfitting direnci",
+        "Feature importance"
+      ]
+    },
+    "4": {
+      "model_name": "Random Forest Regressor",
+      "algorithm": "random_forest",
+      "group_id": 4,
+      "r2_score": 0.9653082266096792,
+      "mse": 0.015880376242402103,
+      "mae": 0.016534504175941277,
+      "training_time": 0.11309623718261719,
+      "cv_mean": 0.9900458754718473,
+      "cv_std": 0.004505995563071168,
+      "cv_time": 0.6044738292694092,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Hızlı eğitim",
+        "Overfitting direnci",
+        "Feature importance"
+      ]
+    },
+    "5": {
+      "model_name": "Random Forest Regressor",
+      "algorithm": "random_forest",
+      "group_id": 5,
+      "r2_score": 0.989360798813918,
+      "mse": 0.005100299866430058,
+      "mae": 0.029131440315684373,
+      "training_time": 0.12193799018859863,
+      "cv_mean": 0.9929490262159513,
+      "cv_std": 0.0008328689179486097,
+      "cv_time": 0.5985479354858398,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Hızlı eğitim",
+        "Overfitting direnci",
+        "Feature importance"
+      ]
+    }
+  },
+  "svm_linear": {
+    "1": {
+      "model_name": "Linear SVM",
+      "algorithm": "svm_linear",
+      "group_id": 1,
+      "r2_score": 0.9935931183878899,
+      "mse": 0.0075364484550956455,
+      "mae": 0.081640022310762,
+      "training_time": 0.021647930145263672,
+      "cv_mean": 0.9931562196660325,
+      "cv_std": 0.00037398995149034075,
+      "cv_time": 0.09301018714904785,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Basit ve yorumlanabilir",
+        "Az parametre",
+        "Hızlı tahmin"
+      ]
+    },
+    "2": {
+      "model_name": "Linear SVM",
+      "algorithm": "svm_linear",
+      "group_id": 2,
+      "r2_score": 0.9956078201707996,
+      "mse": 0.0024558387062294717,
+      "mae": 0.04109666895083902,
+      "training_time": 0.01327204704284668,
+      "cv_mean": 0.9949980084916197,
+      "cv_std": 0.0006959514321393837,
+      "cv_time": 0.07726001739501953,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Basit ve yorumlanabilir",
+        "Az parametre",
+        "Hızlı tahmin"
+      ]
+    },
+    "3": {
+      "model_name": "Linear SVM",
+      "algorithm": "svm_linear",
+      "group_id": 3,
+      "r2_score": 0.9972350348341572,
+      "mse": 0.0018313207568388561,
+      "mae": 0.0362722418795877,
+      "training_time": 0.02327704429626465,
+      "cv_mean": 0.9967621984776693,
+      "cv_std": 0.00022261031047608978,
+      "cv_time": 0.16399264335632324,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Basit ve yorumlanabilir",
+        "Az parametre",
+        "Hızlı tahmin"
+      ]
+    },
+    "4": {
+      "model_name": "Linear SVM",
+      "algorithm": "svm_linear",
+      "group_id": 4,
+      "r2_score": 0.9977343351576177,
+      "mse": 0.001037122251762818,
+      "mae": 0.025683158717363028,
+      "training_time": 0.03868389129638672,
+      "cv_mean": 0.9974188450223863,
+      "cv_std": 7.20906513035492e-05,
+      "cv_time": 0.09186887741088867,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Basit ve yorumlanabilir",
+        "Az parametre",
+        "Hızlı tahmin"
+      ]
+    },
+    "5": {
+      "model_name": "Linear SVM",
+      "algorithm": "svm_linear",
+      "group_id": 5,
+      "r2_score": 0.9951469004817929,
+      "mse": 0.002326515157628919,
+      "mae": 0.04155433232399839,
+      "training_time": 0.022325992584228516,
+      "cv_mean": 0.9950778364578436,
+      "cv_std": 0.00014732098412103208,
+      "cv_time": 0.12459397315979004,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Basit ve yorumlanabilir",
+        "Az parametre",
+        "Hızlı tahmin"
+      ]
+    }
+  },
+  "svm_rbf": {
+    "1": {
+      "model_name": "RBF SVM",
+      "algorithm": "svm_rbf",
+      "group_id": 1,
+      "r2_score": 0.9939467072666909,
+      "mse": 0.007120520001799083,
+      "mae": 0.049005416757567734,
+      "training_time": 0.07477712631225586,
+      "cv_mean": 0.9895512196698135,
+      "cv_std": 0.0041831129514625365,
+      "cv_time": 0.37944793701171875,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Non-linear patterns",
+        "Flexible",
+        "Robust"
+      ]
+    },
+    "2": {
+      "model_name": "RBF SVM",
+      "algorithm": "svm_rbf",
+      "group_id": 2,
+      "r2_score": 0.9684568723916709,
+      "mse": 0.017636990448583786,
+      "mae": 0.04363540256946951,
+      "training_time": 0.06222200393676758,
+      "cv_mean": 0.9800224006049852,
+      "cv_std": 0.010352007918696145,
+      "cv_time": 0.31507396697998047,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Non-linear patterns",
+        "Flexible",
+        "Robust"
+      ]
+    },
+    "3": {
+      "model_name": "RBF SVM",
+      "algorithm": "svm_rbf",
+      "group_id": 3,
+      "r2_score": 0.9920665692982525,
+      "mse": 0.005254553112109259,
+      "mae": 0.0442216362870225,
+      "training_time": 0.06770110130310059,
+      "cv_mean": 0.9916102797955222,
+      "cv_std": 0.0028001662039371478,
+      "cv_time": 0.3425889015197754,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Non-linear patterns",
+        "Flexible",
+        "Robust"
+      ]
+    },
+    "4": {
+      "model_name": "RBF SVM",
+      "algorithm": "svm_rbf",
+      "group_id": 4,
+      "r2_score": 0.9767309362723936,
+      "mse": 0.010651559453167673,
+      "mae": 0.04226248600731273,
+      "training_time": 0.0613560676574707,
+      "cv_mean": 0.9853930228069014,
+      "cv_std": 0.006951533647715299,
+      "cv_time": 0.3081028461456299,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Non-linear patterns",
+        "Flexible",
+        "Robust"
+      ]
+    },
+    "5": {
+      "model_name": "RBF SVM",
+      "algorithm": "svm_rbf",
+      "group_id": 5,
+      "r2_score": 0.9896414863587683,
+      "mse": 0.00496574177109288,
+      "mae": 0.04369141612133031,
+      "training_time": 0.06847071647644043,
+      "cv_mean": 0.9910912503087028,
+      "cv_std": 0.0025326333633774274,
+      "cv_time": 0.34653615951538086,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Non-linear patterns",
+        "Flexible",
+        "Robust"
+      ]
+    }
+  },
+  "svm_poly": {
+    "1": {
+      "model_name": "Polynomial SVM",
+      "algorithm": "svm_poly",
+      "group_id": 1,
+      "r2_score": 0.9720008358743589,
+      "mse": 0.03293556366326525,
+      "mae": 0.12118418993558733,
+      "training_time": 5.774584054946899,
+      "cv_mean": 0.7963609986219427,
+      "cv_std": 0.18379604134029492,
+      "cv_time": 25.325571060180664,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Polynomial relationships",
+        "Interpretable",
+        "Smooth curves"
+      ]
+    },
+    "2": {
+      "model_name": "Polynomial SVM",
+      "algorithm": "svm_poly",
+      "group_id": 2,
+      "r2_score": 0.8845298937882726,
+      "mse": 0.06456383100753237,
+      "mae": 0.12407962747065278,
+      "training_time": 3.8388891220092773,
+      "cv_mean": -1.5546932279352876,
+      "cv_std": 2.619485662160627,
+      "cv_time": 24.263647079467773,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Polynomial relationships",
+        "Interpretable",
+        "Smooth curves"
+      ]
+    },
+    "3": {
+      "model_name": "Polynomial SVM",
+      "algorithm": "svm_poly",
+      "group_id": 3,
+      "r2_score": 0.9488855630645299,
+      "mse": 0.03385465049991907,
+      "mae": 0.12884633260061867,
+      "training_time": 3.9397881031036377,
+      "cv_mean": 0.9232944365547826,
+      "cv_std": 0.013748514989460392,
+      "cv_time": 21.355968952178955,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Polynomial relationships",
+        "Interpretable",
+        "Smooth curves"
+      ]
+    },
+    "4": {
+      "model_name": "Polynomial SVM",
+      "algorithm": "svm_poly",
+      "group_id": 4,
+      "r2_score": 0.9255885790749695,
+      "mse": 0.03406229332026405,
+      "mae": 0.13043806402989358,
+      "training_time": 6.368242263793945,
+      "cv_mean": -1.0460467421640645,
+      "cv_std": 2.1050692969895866,
+      "cv_time": 20.6215078830719,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Polynomial relationships",
+        "Interpretable",
+        "Smooth curves"
+      ]
+    },
+    "5": {
+      "model_name": "Polynomial SVM",
+      "algorithm": "svm_poly",
+      "group_id": 5,
+      "r2_score": 0.9128113327682521,
+      "mse": 0.0417971556377778,
+      "mae": 0.1435506359256774,
+      "training_time": 4.132101058959961,
+      "cv_mean": 0.7481669240405435,
+      "cv_std": 0.16658970341398371,
+      "cv_time": 20.849433660507202,
+      "data_points": 8000,
+      "test_points": 1600,
+      "advantages": [
+        "Polynomial relationships",
+        "Interpretable",
+        "Smooth curves"
+      ]
+    }
+  }
+}
