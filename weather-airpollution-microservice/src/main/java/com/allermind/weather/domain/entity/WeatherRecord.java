@@ -24,10 +24,10 @@ public class WeatherRecord {
     private Long id;
     
     @Column(nullable = false)
-    private Double lat;
+    private String lat;
     
     @Column(nullable = false)
-    private Double lon;
+    private String lon;
     
     @Column(nullable = false)
     private LocalDateTime time;

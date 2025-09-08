@@ -22,10 +22,10 @@ public class City {
     private String ilAdi;
     
     @Column(nullable = false)
-    private Double lat;
+    private String lat;
     
     @Column(nullable = false)
-    private Double lon;
+    private String lon;
     
     @Column(name = "northeast_lat")
     private Double northeastLat;

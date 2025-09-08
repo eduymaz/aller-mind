@@ -1,10 +1,15 @@
 package com.allermind.weather.presentation.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.allermind.weather.application.dto.WeatherAirQualityResponse;
 import com.allermind.weather.application.service.WeatherAirQualityService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/weather-air-quality")
@@ -13,12 +18,13 @@ public class WeatherAirQualityController {
     
     private final WeatherAirQualityService weatherAirQualityService;
     
-    @GetMapping("/{cityName}")
+    @GetMapping
     public ResponseEntity<WeatherAirQualityResponse> getWeatherAndAirQuality(
-            @PathVariable String cityName) {
+            @RequestParam String lat,
+            @RequestParam String lon) {
         
         WeatherAirQualityResponse response = weatherAirQualityService
-                .getWeatherAndAirQualityByCityName(cityName);
+                .getWeatherAndAirQualityByCoordinates(lat, lon);
         
         return ResponseEntity.ok(response);
     }

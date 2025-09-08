@@ -2,6 +2,7 @@ package com.allermind.weather.application.dto;
 
 import com.allermind.weather.domain.entity.AirQualityRecord;
 import com.allermind.weather.domain.entity.WeatherRecord;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,9 @@ import lombok.NoArgsConstructor;
 public class WeatherAirQualityResponse {
     
     private String cityName;
+    private String latitude;
+    private String longitude;
     private WeatherRecord weatherRecord;
     private AirQualityRecord airQualityRecord;
 }
+
