@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 # Database configuration
 DB_HOST = "localhost"
 DB_PORT = "5432"
-DB_NAME = "ALLERMIND"
+DB_NAME = "allermind"
 DB_USER = "postgres"
 DB_PASSWORD = "123456"
 SCHEMA_NAME = "POLLEN"
