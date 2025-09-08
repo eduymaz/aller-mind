@@ -2,7 +2,7 @@ import requests
 from domain.entities import WeatherData, AirQualityData
 
 class WeatherService:
-    def fetch(self, latitude: float, longitude: float, start_date: str, end_date: str) -> WeatherData:
+    def fetch(self, latitude: str, longitude: str, start_date: str, end_date: str) -> WeatherData:
         url = (
             #f"https://archive-api.open-meteo.com/v1/archive?"
             "https://api.open-meteo.com/v1/forecast?"
@@ -14,10 +14,10 @@ class WeatherService:
         resp = requests.get(url)
         resp.raise_for_status()
         data = resp.json()
-        return WeatherData(latitude=data['latitude'], longitude=data['longitude'], hourly=data['hourly'])
+        return WeatherData(latitude, longitude, hourly=data['hourly'])
 
 class AirQualityService:
-    def fetch(self, latitude: float, longitude: float, start_date: str, end_date: str) -> AirQualityData:
+    def fetch(self, latitude: str, longitude: str, start_date: str, end_date: str) -> AirQualityData:
         url = (
             f"https://air-quality-api.open-meteo.com/v1/air-quality?"
             f"latitude={latitude}&longitude={longitude}&start_date={start_date}&end_date={end_date}"
@@ -27,4 +27,4 @@ class AirQualityService:
         resp = requests.get(url)
         resp.raise_for_status()
         data = resp.json()
-        return AirQualityData(latitude=data['latitude'], longitude=data['longitude'], hourly=data['hourly'])
+        return AirQualityData(latitude, longitude, hourly=data['hourly'])

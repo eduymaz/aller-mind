@@ -7,8 +7,8 @@ from typing import Optional, List, Dict, Any
 class City:
     plaka: int
     il_adi: str
-    lat: float
-    lon: float
+    lat: str
+    lon: str
     northeast_lat: Optional[float] = None
     northeast_lon: Optional[float] = None
     southwest_lat: Optional[float] = None
@@ -17,22 +17,22 @@ class City:
 
 @dataclass
 class WeatherData:
-    latitude: float
-    longitude: float
+    latitude: str
+    longitude: str
     hourly: Dict[str, List[Any]]
 
 
 @dataclass
 class AirQualityData:
-    latitude: float
-    longitude: float
+    latitude: str
+    longitude: str
     hourly: Dict[str, List[Any]]
 
 
 @dataclass
 class WeatherRecord:
-    lat: float
-    lon: float
+    lat: str
+    lon: str
     time: datetime
     temperature_2m: float
     relative_humidity_2m: int
@@ -50,8 +50,8 @@ class WeatherRecord:
 
 @dataclass
 class AirQualityRecord:
-    lat: float
-    lon: float
+    lat: str
+    lon: str
     time: datetime
     pm10: float
     pm2_5: float

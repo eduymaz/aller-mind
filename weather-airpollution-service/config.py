@@ -6,7 +6,7 @@ from typing import Callable
 class DatabaseConfig:
     host: str = "localhost"
     port: str = "5432"
-    name: str = "ALLERMIND"
+    name: str = "allermind"
     user: str = "postgres"
     password: str = "123456"
     schema: str = "WEATHER"
