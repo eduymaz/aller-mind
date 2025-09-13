@@ -1,0 +1,103 @@
+{
+  "user_preferences": {
+    "age": 29,
+    "gender": "female",
+    "location": {
+      "city": "İzmir",
+      "latitude": "",
+      "longitude": ""
+    },
+    "clinical_diagnosis": "none",
+    "family_allergy_history": true,
+    "previous_allergic_reactions": {
+      "anaphylaxis": false,
+      "severe_asthma_attack": false,
+      "hospitalization": false
+    },
+    "current_medications": [
+      "none"
+    ],
+    "tree_pollen_allergy": {
+      "birch": false,
+      "olive": false,
+      "oak": false,
+      "pine": false,
+      "symptoms_severity": "none"
+    },
+    "grass_pollen_allergy": {
+      "graminales": false,
+      "timothy": false,
+      "bermuda": false,
+      "symptoms_severity": "none"
+    },
+    "weed_pollen_allergy": {
+      "ragweed": false,
+      "mugwort": false,
+      "plantain": false,
+      "symptoms_severity": "none"
+    },
+    "food_allergies": {
+      "oral_allergy_syndrome": false,
+      "cross_reactions": {
+        "birch_apple_cherry": false,
+        "ragweed_melon_banana": false,
+        "mugwort_celery_spices": false
+      },
+      "primary_food_allergies": [
+        "soy"
+      ]
+    },
+    "environmental_triggers": {
+      "air_pollution_sensitivity": "moderate",
+      "weather_sensitivity": {
+        "humidity": true,
+        "temperature_changes": true,
+        "barometric_pressure": false
+      },
+      "indoor_allergens": {
+        "dust_mites": true,
+        "pet_dander": true,
+        "mold": false
+      }
+    },
+    "user_id": "user_20250912_145500"
+  },
+  "analysis_result": {
+    "user_id": "user_20250912_145500",
+    "classification_timestamp": "2025-09-12T14:55:00.514101",
+    "assigned_group": {
+      "id": 2,
+      "name": "Hafif-Orta Alerjik Grup",
+      "sensitivity_threshold": 0.4,
+      "algorithm_weights": {
+        "polen": 0.3,
+        "air_quality": 0.3,
+        "weather": 0.4
+      },
+      "immunologic_profile": {
+        "ige_level": "moderate_high",
+        "th2_activation": "moderate",
+        "anaphylaxis_risk": "low"
+      }
+    },
+    "risk_assessment": {
+      "pollen_risk": 0.0,
+      "genetic_predisposition": 0.7,
+      "environmental_sensitivity": 0.94,
+      "age_vulnerability": {
+        "vulnerable": false,
+        "category": "adult",
+        "base_sensitivity": 0.5,
+        "immune_maturity": "mature"
+      }
+    },
+    "recommendations": [
+      "Mevsimsel antihistaminik kullanın",
+      "Polen haritalarını takip edin",
+      "Pencere ve kapıları kapalı tutun",
+      "HEPA filtreli hava temizleyici kullanın"
+    ],
+    "confidence_score": 0.8200000000000001
+  },
+  "timestamp": "2025-09-12T14:55:00.521902"
+}
