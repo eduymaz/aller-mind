@@ -1,0 +1,65 @@
+package com.allermind.model.client;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
+
+import com.allermind.model.dto.ModelPredictionRequest;
+import com.allermind.model.dto.ModelPredictionResponse;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Component
+@Slf4j
+public class MachineLearningModelClient {
+
+    private final RestTemplate restTemplate;
+    private final String mlModelServiceBaseUrl;
+
+    public MachineLearningModelClient(RestTemplate restTemplate,
+                                     @Value("${ml.model.service.base-url:http://localhost:8000}") String mlModelServiceBaseUrl) {
+        this.restTemplate = restTemplate;
+        this.mlModelServiceBaseUrl = mlModelServiceBaseUrl;
+    }
+
+    public ModelPredictionResponse getPrediction(ModelPredictionRequest request) {
+        try {
+            String url = mlModelServiceBaseUrl + "/predict";
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            HttpEntity<ModelPredictionRequest> entity = new HttpEntity<>(request, headers);
+
+            log.info("Calling ML model service with URL: {}", url);
+            log.debug("Request body: {}", request);
+
+            ResponseEntity<ModelPredictionResponse> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    entity,
+                    ModelPredictionResponse.class
+            );
+
+            ModelPredictionResponse mlResponse = response.getBody();
+            
+            if (mlResponse != null && !Boolean.TRUE.equals(mlResponse.getSuccess())) {
+                log.error("ML model returned error: {}", mlResponse.getMessage());
+                throw new RuntimeException("ML model error: " + mlResponse.getMessage());
+            }
+            
+            log.info("ML model response received successfully with {} predictions", 
+                mlResponse != null && mlResponse.getPredictions() != null ? mlResponse.getPredictions().size() : 0);
+
+            return mlResponse;
+        } catch (Exception e) {
+            log.error("Error calling ML model service: {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to get prediction from ML model", e);
+        }
+    }
+}
