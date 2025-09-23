@@ -45,5 +45,11 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>AllerMind uygulaması, hava durumu ve polen verilerini almak için konumunuza erişim gerektirir. Bu bilgiler sadece alerji risk tahmini için kullanılır.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>AllerMind uygulaması, hava durumu ve polen verilerini almak için konumunuza erişim gerektirir. Bu bilgiler sadece alerji risk tahmini için kullanılır.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>AllerMind uygulaması, hava durumu ve polen verilerini almak için konumunuza erişim gerektirir.</string>
 </dict>
 </plist>

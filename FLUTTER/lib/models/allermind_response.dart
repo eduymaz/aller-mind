@@ -13,6 +13,7 @@ class AllerMindResponse {
   final int? overallRiskCode;
   final ModelPredictionResponse? modelPrediction;
   final UserGroup? userGroup;
+  final String? recommendation;
 
   AllerMindResponse({
     this.predictionId,
@@ -27,6 +28,7 @@ class AllerMindResponse {
     this.overallRiskCode,
     this.modelPrediction,
     this.userGroup,
+    this.recommendation,
   });
 
   factory AllerMindResponse.fromJson(Map<String, dynamic> json) {
@@ -45,13 +47,20 @@ class AllerMindResponse {
           ? ModelPredictionResponse.fromJson(json['modelPrediction'])
           : null,
       userGroup: json['userGroup'] != null 
-          ? UserGroup.fromJson(json['userGroup'])
+          ? UserGroup.fromApiJson(json['userGroup'])
           : null,
+      recommendation: json['recommendation'],
     );
   }
 
-  /// En yüksek risk grubunun tavsiyesini döndürür
+  /// Tavsiye mesajını döndürür
   String getRecommendation() {
+    // Önce API'den gelen recommendation'ı kontrol et
+    if (recommendation != null && recommendation!.isNotEmpty) {
+      return recommendation!;
+    }
+    
+    // Eğer yoksa, risk seviyesine göre generate et
     if (modelPrediction?.predictions != null && modelPrediction!.predictions!.isNotEmpty) {
       final highestRisk = modelPrediction!.predictions!.reduce((a, b) => 
           a.predictionValue! > b.predictionValue! ? a : b);
@@ -128,7 +137,7 @@ class ModelPredictionResponse {
           ? LocationInfo.fromJson(json['location'])
           : null,
       userGroup: json['user_group'] != null 
-          ? UserGroup.fromJson(json['user_group'])
+          ? UserGroup.fromApiJson(json['user_group'])
           : null,
       predictions: json['predictions'] != null
           ? (json['predictions'] as List).map((e) => GroupResult.fromJson(e)).toList()
@@ -157,7 +166,7 @@ class LocationInfo {
     return LocationInfo(
       latitude: json['latitude']?.toDouble(),
       longitude: json['longitude']?.toDouble(),
-      cityName: json['city_name'],
+      cityName: json['city_name'], // API'de city_name kullanılıyor
     );
   }
 }

@@ -45,10 +45,13 @@ class _LoadingScreenState extends State<LoadingScreen>
 
   Future<void> _startPredictionProcess() async {
     final provider = Provider.of<AllerMindProvider>(context, listen: false);
+    print('🔵 DEBUG: Tahmin süreci başlatılıyor...');
 
     try {
       // 1. Konum al
+      print('🔵 DEBUG: Konum alınmaya çalışılıyor...');
       final position = await provider.getCurrentLocation();
+      print('🔵 DEBUG: Konum sonucu: $position');
       if (position == null) {
         _showErrorAndReturn('Konum alınamadı');
         return;
@@ -58,9 +61,13 @@ class _LoadingScreenState extends State<LoadingScreen>
       await Future.delayed(const Duration(seconds: 1));
 
       // 2. Tahmin al
+      print('🔵 DEBUG: Tahmin isteniyor...');
       final success = await provider.getPrediction();
+      print('🔵 DEBUG: Tahmin sonucu: $success');
+      print('🔵 DEBUG: Provider response: ${provider.currentResponse}');
       if (!success) {
-        _showErrorAndReturn('Tahmin alınamadı');
+        print('🔴 DEBUG: Tahmin başarısız, error: ${provider.errorMessage}');
+        _showErrorAndReturn('Tahmin alınamadı: ${provider.errorMessage}');
         return;
       }
 
@@ -73,7 +80,9 @@ class _LoadingScreenState extends State<LoadingScreen>
           ),
         );
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print('🔴 DEBUG: Hata yakalandı: $e');
+      print('🔴 DEBUG: Stack trace: $stackTrace');
       _showErrorAndReturn('Bir hata oluştu: $e');
     }
   }

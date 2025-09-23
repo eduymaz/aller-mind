@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/allermind_provider.dart';
 import '../models/user_settings.dart';
 import 'loading_screen.dart';
+import 'detailed_profile_form_screen.dart';
 
 class UserSelectionScreen extends StatefulWidget {
   const UserSelectionScreen({super.key});
@@ -168,6 +169,63 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> {
                 ),
               ),
               
+              const SizedBox(height: 16),
+
+              // Detaylı Profil Butonu
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DetailedProfileFormScreen(),
+                      ),
+                    );
+                  },
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.teal,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    side: const BorderSide(color: Colors.teal, width: 2),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  icon: const Icon(Icons.person_add),
+                  label: const Text(
+                    'Detaylı Profil Oluştur',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              
+              const SizedBox(height: 16),
+
+              // Detaylı Profil Açıklaması
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.purple.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.purple.shade200),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.medical_information, color: Colors.purple.shade700),
+                    const SizedBox(width: 12),
+                    const Expanded(
+                      child: Text(
+                        'Daha hassas tahmin için detaylı sağlık profili oluşturabilir, polen ve besin alerjilerinizi belirtebilirsiniz.',
+                        style: TextStyle(fontSize: 13),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
               const SizedBox(height: 16),
               
               // Bilgilendirme

@@ -49,6 +49,15 @@ class UserGroup {
     );
   }
 
+  // API response'u için özel factory method
+  factory UserGroup.fromApiJson(Map<String, dynamic> json) {
+    return UserGroup(
+      groupId: int.tryParse(json['groupId'].toString()) ?? 0,
+      groupName: json['groupDescription'] ?? '', // API'de groupDescription kullanılıyor
+      description: json['riskLevel'] ?? '', // riskLevel'ı description olarak kullanıyoruz
+    );
+  }
+
   static List<UserGroup> getAllGroups() {
     return [
       UserGroup(groupId: 1, groupName: "Şiddetli Alerjik Grup", description: "Ciddi alerjik reaksiyonları olan kişiler"),
