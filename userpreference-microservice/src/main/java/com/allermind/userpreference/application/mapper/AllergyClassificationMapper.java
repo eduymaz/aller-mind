@@ -1,16 +1,23 @@
 package com.allermind.userpreference.application.mapper;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Component;
+
 import com.allermind.userpreference.application.dto.AllergyClassificationRequest;
 import com.allermind.userpreference.application.dto.AllergyClassificationResponse;
 import com.allermind.userpreference.domain.model.aggregate.UserPreference;
-import com.allermind.userpreference.domain.model.enums.*;
+import com.allermind.userpreference.domain.model.enums.AllergyReactionType;
+import com.allermind.userpreference.domain.model.enums.ClinicalDiagnosis;
+import com.allermind.userpreference.domain.model.enums.EnvironmentalTrigger;
+import com.allermind.userpreference.domain.model.enums.FoodType;
+import com.allermind.userpreference.domain.model.enums.Gender;
+import com.allermind.userpreference.domain.model.enums.PollenType;
 import com.allermind.userpreference.domain.model.valueobject.Age;
 import com.allermind.userpreference.domain.model.valueobject.AllergyClassificationResult;
 import com.allermind.userpreference.domain.model.valueobject.Location;
-import org.springframework.stereotype.Component;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 public class AllergyClassificationMapper {
@@ -98,6 +105,7 @@ public class AllergyClassificationMapper {
     public AllergyClassificationResponse toResponse(AllergyClassificationResult result, UserPreference userPreference) {
         AllergyClassificationResponse response = new AllergyClassificationResponse();
         
+        // Classification result mapping
         response.setUserPreferenceId(userPreference.getId());
         response.setGroupId(result.getGroupType().getId());
         response.setGroupName(result.getGroupType().getName());
@@ -109,6 +117,82 @@ public class AllergyClassificationMapper {
         response.setEnvironmentalSensitivityFactors(result.getEnvironmentalSensitivityFactors());
         response.setPollenSpecificRisks(result.getPollenSpecificRisks());
         response.setRecommendationAdjustments(result.getRecommendationAdjustments());
+        
+        // User preference details mapping
+        if (userPreference.getAge() != null) {
+            response.setAge(userPreference.getAge().value());
+        }
+        if (userPreference.getGender() != null) {
+            response.setGender(userPreference.getGender().getValue());
+        }
+        if (userPreference.getLocation() != null) {
+            response.setLatitude(userPreference.getLocation().latitude());
+            response.setLongitude(userPreference.getLocation().longitude());
+        }
+        if (userPreference.getClinicalDiagnosis() != null) {
+            response.setClinicalDiagnosis(userPreference.getClinicalDiagnosis().getValue());
+        }
+        response.setFamilyAllergyHistory(userPreference.getFamilyAllergyHistory());
+        
+        // Map previous allergic reactions to String keys
+        if (userPreference.getPreviousAllergicReactions() != null && !userPreference.getPreviousAllergicReactions().isEmpty()) {
+            Map<String, Boolean> reactions = userPreference.getPreviousAllergicReactions().entrySet().stream()
+                    .collect(Collectors.toMap(
+                            entry -> entry.getKey().getName(),
+                            Map.Entry::getValue
+                    ));
+            response.setPreviousAllergicReactions(reactions);
+        }
+        
+        response.setCurrentMedications(userPreference.getCurrentMedications());
+        
+        // Map pollen allergies to String keys
+        if (userPreference.getTreePollenAllergies() != null && !userPreference.getTreePollenAllergies().isEmpty()) {
+            Map<String, Boolean> treeAllergies = userPreference.getTreePollenAllergies().entrySet().stream()
+                    .collect(Collectors.toMap(
+                            entry -> entry.getKey().getName(),
+                            Map.Entry::getValue
+                    ));
+            response.setTreePollenAllergies(treeAllergies);
+        }
+        
+        if (userPreference.getGrassPollenAllergies() != null && !userPreference.getGrassPollenAllergies().isEmpty()) {
+            Map<String, Boolean> grassAllergies = userPreference.getGrassPollenAllergies().entrySet().stream()
+                    .collect(Collectors.toMap(
+                            entry -> entry.getKey().getName(),
+                            Map.Entry::getValue
+                    ));
+            response.setGrassPollenAllergies(grassAllergies);
+        }
+        
+        if (userPreference.getWeedPollenAllergies() != null && !userPreference.getWeedPollenAllergies().isEmpty()) {
+            Map<String, Boolean> weedAllergies = userPreference.getWeedPollenAllergies().entrySet().stream()
+                    .collect(Collectors.toMap(
+                            entry -> entry.getKey().getName(),
+                            Map.Entry::getValue
+                    ));
+            response.setWeedPollenAllergies(weedAllergies);
+        }
+        
+        // Map food allergies to String keys
+        if (userPreference.getFoodAllergies() != null && !userPreference.getFoodAllergies().isEmpty()) {
+            Map<String, Boolean> foodAllergies = userPreference.getFoodAllergies().entrySet().stream()
+                    .collect(Collectors.toMap(
+                            entry -> entry.getKey().getName(),
+                            Map.Entry::getValue
+                    ));
+            response.setFoodAllergies(foodAllergies);
+        }
+        
+        // Map environmental triggers to String keys
+        if (userPreference.getEnvironmentalTriggers() != null && !userPreference.getEnvironmentalTriggers().isEmpty()) {
+            Map<String, Boolean> triggers = userPreference.getEnvironmentalTriggers().entrySet().stream()
+                    .collect(Collectors.toMap(
+                            entry -> entry.getKey().getName(),
+                            Map.Entry::getValue
+                    ));
+            response.setEnvironmentalTriggers(triggers);
+        }
         
         return response;
     }
