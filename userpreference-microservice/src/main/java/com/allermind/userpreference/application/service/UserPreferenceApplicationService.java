@@ -1,19 +1,23 @@
 package com.allermind.userpreference.application.service;
 
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.allermind.userpreference.application.dto.AllergyClassificationRequest;
 import com.allermind.userpreference.application.dto.AllergyClassificationResponse;
 import com.allermind.userpreference.application.mapper.AllergyClassificationMapper;
 import com.allermind.userpreference.application.port.in.AllergyGroupClassificationUseCase;
+import com.allermind.userpreference.application.port.in.GetUserPreferenceUseCase;
 import com.allermind.userpreference.application.port.out.UserPreferenceRepository;
 import com.allermind.userpreference.domain.model.aggregate.UserPreference;
 import com.allermind.userpreference.domain.model.valueobject.AllergyClassificationResult;
 import com.allermind.userpreference.domain.service.AllergyGroupClassifierDomainService;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class UserPreferenceApplicationService implements AllergyGroupClassificationUseCase {
+public class UserPreferenceApplicationService implements AllergyGroupClassificationUseCase, GetUserPreferenceUseCase {
     
     private final AllergyGroupClassifierDomainService classifierDomainService;
     private final UserPreferenceRepository userPreferenceRepository;
@@ -47,6 +51,19 @@ public class UserPreferenceApplicationService implements AllergyGroupClassificat
         
         // Convert to response
         return mapper.toResponse(result, savedPreference);
+    }
+    
+    @Override
+    public AllergyClassificationResponse getUserPreference(UUID userId) {
+        // Find user preference by ID
+        UserPreference userPreference = userPreferenceRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User preference not found with ID: " + userId));
+        
+        // Re-classify allergy group based on stored user preference
+        AllergyClassificationResult result = classifierDomainService.classifyAllergyGroup(userPreference);
+        
+        // Convert to response
+        return mapper.toResponse(result, userPreference);
     }
     
     private void validateRequest(AllergyClassificationRequest request) {

@@ -1,7 +1,11 @@
 package com.allermind.userpreference.infrastructure.adapter.in.web;
 
+import java.util.UUID;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,21 +14,33 @@ import org.springframework.web.bind.annotation.RestController;
 import com.allermind.userpreference.application.dto.AllergyClassificationRequest;
 import com.allermind.userpreference.application.dto.AllergyClassificationResponse;
 import com.allermind.userpreference.application.port.in.AllergyGroupClassificationUseCase;
+import com.allermind.userpreference.application.port.in.GetUserPreferenceUseCase;
 
 @RestController
 @RequestMapping("/api/v1/allergy-classification")
 public class AllergyClassificationController {
     
     private final AllergyGroupClassificationUseCase classificationUseCase;
+    private final GetUserPreferenceUseCase getUserPreferenceUseCase;
     
-    public AllergyClassificationController(AllergyGroupClassificationUseCase classificationUseCase) {
+    public AllergyClassificationController(
+            AllergyGroupClassificationUseCase classificationUseCase,
+            GetUserPreferenceUseCase getUserPreferenceUseCase) {
         this.classificationUseCase = classificationUseCase;
+        this.getUserPreferenceUseCase = getUserPreferenceUseCase;
     }
     
     @PostMapping("/classify")
     public ResponseEntity<AllergyClassificationResponse> classifyAllergy(
             @RequestBody AllergyClassificationRequest request) {
         AllergyClassificationResponse response = classificationUseCase.classifyAllergy(request);
+        return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<AllergyClassificationResponse> getUserPreference(
+            @PathVariable UUID userId) {
+        AllergyClassificationResponse response = getUserPreferenceUseCase.getUserPreference(userId);
         return ResponseEntity.ok(response);
     }
     
