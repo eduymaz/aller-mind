@@ -44,6 +44,11 @@ public class ModelPredictionRequest {
         private Double no2;
         private Double so2;
         private Double co;
+        private Integer dust;
+        private Double methane;
+        private Double uvIndex;
+        private Double aerosolOpticalDepth;
+        private Integer co2;
     }
     
     @Data
@@ -68,5 +73,9 @@ public class ModelPredictionRequest {
         private Double humidity;
         private Double windSpeed;
         private Double pressure;
+        private Double precipitation;
+        private Integer windDirection;
+        private Double sunshineDuration;
+        private Integer cloudCover;
     }
 }

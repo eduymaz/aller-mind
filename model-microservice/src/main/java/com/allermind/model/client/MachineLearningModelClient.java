@@ -57,13 +57,25 @@ public class MachineLearningModelClient {
             }
             
             if (mlResponse != null) {
-                log.info("ML model response received successfully - Risk Score: {}, Risk Level: {}, User Group: {}", 
+                log.info("ML model response received successfully - Risk Score: {}, Risk Level: {}, User Group: {} (ID: {})", 
                     mlResponse.getRiskScore(), 
                     mlResponse.getRiskLevel(),
-                    mlResponse.getUserGroup() != null ? mlResponse.getUserGroup().getGroupName() : "null");
+                    mlResponse.getUserGroup() != null ? mlResponse.getUserGroup().getGroupName() : "null",
+                    mlResponse.getUserGroup() != null ? mlResponse.getUserGroup().getGroupId() : "null");
                 
                 if (mlResponse.getPredictions() != null) {
                     log.info("Legacy predictions count: {}", mlResponse.getPredictions().size());
+                }
+                
+                // Log additional fields for debugging
+                log.debug("Confidence: {}, Model Version: {}, Data Quality Score: {}", 
+                    mlResponse.getConfidence(), 
+                    mlResponse.getModelVersion(), 
+                    mlResponse.getDataQualityScore());
+                    
+                if (mlResponse.getPollenSpecificRisks() != null) {
+                    log.debug("High risk pollens: {}", mlResponse.getPollenSpecificRisks().getHighRiskPollens());
+                    log.debug("Cross reactive foods: {}", mlResponse.getPollenSpecificRisks().getCrossReactiveFoods());
                 }
             } else {
                 log.warn("Received null response from ML model service");

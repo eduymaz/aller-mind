@@ -32,15 +32,15 @@ public class ModelPredictionResponse {
     private UserGroupInfo userGroup;
     
     @JsonProperty("contributingFactors")
-    private Map<String, Double> contributingFactors;
+    private Map<String, Object> contributingFactors;
     
     private List<String> recommendations;
     
     @JsonProperty("environmentalRisks")
-    private Map<String, Double> environmentalRisks;
+    private Map<String, Object> environmentalRisks;
     
     @JsonProperty("personalModifiers")
-    private Map<String, Double> personalModifiers;
+    private Map<String, Object> personalModifiers;
     
     @JsonProperty("immunologicProfile")
     private Map<String, Object> immunologicProfile;
@@ -49,7 +49,7 @@ public class ModelPredictionResponse {
     private Map<String, Boolean> environmentalSensitivityFactors;
     
     @JsonProperty("pollenSpecificRisks")
-    private Map<String, Object> pollenSpecificRisks;
+    private PollenSpecificRisks pollenSpecificRisks;
     
     @JsonProperty("dataQualityScore")
     private Double dataQualityScore;
@@ -69,7 +69,7 @@ public class ModelPredictionResponse {
     @AllArgsConstructor
     public static class UserGroupInfo {
         @JsonProperty("groupId")
-        private String groupId;
+        private Integer groupId;
         
         @JsonProperty("groupName")
         private String groupName;
@@ -126,5 +126,20 @@ public class ModelPredictionResponse {
         @JsonProperty("group_name")
         private String groupName;
         private Double value;
+    }
+    
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class PollenSpecificRisks {
+        @JsonProperty("high_risk_pollens")
+        private List<String> highRiskPollens;
+        
+        @JsonProperty("cross_reactive_foods")
+        private List<String> crossReactiveFoods;
+        
+        @JsonProperty("moderate_risk_pollens")
+        private List<String> moderateRiskPollens;
     }
 }

@@ -130,6 +130,11 @@ public class AllerMindModelService {
                 .no2(airQuality.getNitrogenDioxide() != null ? airQuality.getNitrogenDioxide().doubleValue() : 0.0)
                 .so2(airQuality.getSulphurDioxide() != null ? airQuality.getSulphurDioxide().doubleValue() : 0.0)
                 .co(airQuality.getCarbonMonoxide() != null ? airQuality.getCarbonMonoxide().doubleValue() : 0.0)
+                .co2(airQuality.getCarbonDioxide() != null ? airQuality.getCarbonDioxide() : 0)
+                .dust(airQuality.getDust() != null ? airQuality.getDust() : 0)
+                .methane(airQuality.getMethane() != null ? airQuality.getMethane() : 0)
+                .uvIndex(airQuality.getUvIndex() != null ? airQuality.getUvIndex() : 0)
+                .aerosolOpticalDepth(airQuality.getAerosolOpticalDepth() != null ? airQuality.getAerosolOpticalDepth() : 0)
                 .build();
     }
     
@@ -198,15 +203,23 @@ public class AllerMindModelService {
                     .humidity(0.0)
                     .windSpeed(0.0)
                     .pressure(0.0)
+                    .precipitation(0.0)
+                    .windDirection(0)
+                    .sunshineDuration(0.0)
+                    .cloudCover(0)
                     .build();
         }
         
         WeatherRecord weather = weatherAirQualityData.getWeatherRecord();
         return ModelPredictionRequest.WeatherData.builder()
-                .temperature(weather.getTemperature2m() != null ? weather.getTemperature2m().doubleValue() : 0.0)
+                .temperature(weather.getTemperature2m() != null ? weather.getTemperature2m() : 0.0)
                 .humidity(weather.getRelativeHumidity2m() != null ? weather.getRelativeHumidity2m().doubleValue() : 0.0)
-                .windSpeed(weather.getWindSpeed10m() != null ? weather.getWindSpeed10m().doubleValue() : 0.0)
-                .pressure(weather.getSurfacePressure() != null ? weather.getSurfacePressure().doubleValue() : 0.0)
+                .windSpeed(weather.getWindSpeed10m() != null ? weather.getWindSpeed10m() : 0.0)
+                .pressure(weather.getSurfacePressure() != null ? weather.getSurfacePressure() : 0.0)
+                .precipitation(weather.getPrecipitation() != null ? weather.getPrecipitation() : 0.0)
+                .windDirection(weather.getWindDirection10m() != null ? weather.getWindDirection10m().intValue() : 0)
+                .sunshineDuration(weather.getSunshineDuration() != null ? weather.getSunshineDuration() : 0.0)
+                .cloudCover(weather.getCloudCover() != null ? weather.getCloudCover() : 0)
                 .build();
     }
 
