@@ -29,7 +29,7 @@ public class MachineLearningModelClient {
 
     public ModelPredictionResponse getPrediction(ModelPredictionRequest request) {
         try {
-            String url = mlModelServiceBaseUrl + "/predict";
+            String url = mlModelServiceBaseUrl + "/api/v1/predict";
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -48,13 +48,26 @@ public class MachineLearningModelClient {
 
             ModelPredictionResponse mlResponse = response.getBody();
             
+            log.debug("Raw response status: {}", response.getStatusCode());
+            log.debug("Raw response body: {}", mlResponse);
+            
             if (mlResponse != null && !Boolean.TRUE.equals(mlResponse.getSuccess())) {
                 log.error("ML model returned error: {}", mlResponse.getMessage());
                 throw new RuntimeException("ML model error: " + mlResponse.getMessage());
             }
             
-            log.info("ML model response received successfully with {} predictions", 
-                mlResponse != null && mlResponse.getPredictions() != null ? mlResponse.getPredictions().size() : 0);
+            if (mlResponse != null) {
+                log.info("ML model response received successfully - Risk Score: {}, Risk Level: {}, User Group: {}", 
+                    mlResponse.getRiskScore(), 
+                    mlResponse.getRiskLevel(),
+                    mlResponse.getUserGroup() != null ? mlResponse.getUserGroup().getGroupName() : "null");
+                
+                if (mlResponse.getPredictions() != null) {
+                    log.info("Legacy predictions count: {}", mlResponse.getPredictions().size());
+                }
+            } else {
+                log.warn("Received null response from ML model service");
+            }
 
             return mlResponse;
         } catch (Exception e) {

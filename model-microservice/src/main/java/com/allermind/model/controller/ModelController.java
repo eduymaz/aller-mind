@@ -1,15 +1,15 @@
 package com.allermind.model.controller;
 
+import java.util.UUID;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.allermind.model.dto.AllerMindResponse;
-import com.allermind.model.dto.UserSettings;
 import com.allermind.model.service.AllerMindModelService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,12 +27,12 @@ public class ModelController {
     public ResponseEntity<AllerMindResponse> getPrediction(
             @RequestParam String lat,
             @RequestParam String lon,
-            @RequestBody UserSettings userSettings) {
+            @RequestParam String userId) {
         
         log.info("Received prediction request for coordinates: {}, {} and user: {}", 
-                lat, lon, userSettings.getUserId());
+                lat, lon, userId);
 
-        AllerMindResponse response = allerMindModelService.processAllerMindRequest(lat, lon, userSettings);
+        AllerMindResponse response = allerMindModelService.processAllerMindRequest(lat, lon, UUID.fromString(userId));
         
         log.info("Returning prediction response with risk level: {}", response.getOverallRiskLevel());
         
@@ -43,12 +43,12 @@ public class ModelController {
     public ResponseEntity<AllerMindResponse> getPredictionPost(
             @RequestParam String lat,
             @RequestParam String lon,
-            @RequestBody UserSettings userSettings) {
+            @RequestParam String userId) {
         
         log.info("Received POST prediction request for coordinates: {}, {} and user: {}", 
-                lat, lon, userSettings.getUserId());
+                lat, lon, userId);
 
-        AllerMindResponse response = allerMindModelService.processAllerMindRequest(lat, lon, userSettings);
+        AllerMindResponse response = allerMindModelService.processAllerMindRequest(lat, lon, UUID.fromString(userId));
         
         log.info("Returning prediction response with risk level: {}", response.getOverallRiskLevel());
         

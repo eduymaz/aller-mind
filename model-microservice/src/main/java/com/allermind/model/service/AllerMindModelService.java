@@ -1,22 +1,21 @@
 package com.allermind.model.service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
 import com.allermind.model.client.MachineLearningModelClient;
 import com.allermind.model.client.PollenServiceClient;
+import com.allermind.model.client.UserPreferenceServiceClient;
 import com.allermind.model.client.WeatherAirQualityServiceClient;
 import com.allermind.model.dto.AirQualityRecord;
 import com.allermind.model.dto.AllerMindResponse;
+import com.allermind.model.dto.AllergyClassificationResponse;
 import com.allermind.model.dto.ModelPredictionRequest;
 import com.allermind.model.dto.ModelPredictionResponse;
 import com.allermind.model.dto.PollenResponse;
 import com.allermind.model.dto.UserGroup;
-import com.allermind.model.dto.UserSettings;
 import com.allermind.model.dto.WeatherAirQualityResponse;
 import com.allermind.model.dto.WeatherRecord;
 
@@ -31,107 +30,206 @@ public class AllerMindModelService {
     private final PollenServiceClient pollenServiceClient;
     private final WeatherAirQualityServiceClient weatherAirQualityServiceClient;
     private final MachineLearningModelClient mlModelClient;
-    private final UserGroupingService userGroupingService;
+    private final UserPreferenceServiceClient userPreferenceServiceClient;
 
-    public AllerMindResponse processAllerMindRequest(String lat, String lon, UserSettings userSettings) {
-        log.info("Processing AllerMind request for coordinates: {}, {}", lat, lon);
+    public AllerMindResponse processAllerMindRequest(String lat, String lon, UUID userId) {
+        log.info("Processing AllerMind request for coordinates: {}, {} and user: {}", lat, lon, userId);
 
         try {
-            // 1. User settings'i grup bilgisine dönüştür
-            UserGroup userGroup = userGroupingService.determineUserGroup(userSettings);
-            log.info("User group determined: {}", userGroup);
+            // 1. User preferences'i user preference service'den al
+            AllergyClassificationResponse userPreferenceResponse = userPreferenceServiceClient.getUserPreference(userId);
+            log.info("User preference retrieved for user: {} with group: {}", userId, userPreferenceResponse.getGroupName());
+            
+            // 2. User preference response'u UserGroup'a dönüştür
+            UserGroup userGroup = convertToUserGroup(userPreferenceResponse);
+            log.info("User group converted: {}", userGroup);
 
-            // 2. Pollen verisi al
+            // 3. Pollen verisi al
             List<PollenResponse> pollenData = pollenServiceClient.getPollenData(lat, lon);
             log.info("Pollen data retrieved: {} records", pollenData != null ? pollenData.size() : 0);
 
-            // 3. Weather ve Air Quality verisi al
+            // 4. Weather ve Air Quality verisi al
             WeatherAirQualityResponse weatherAirQualityData = 
                 weatherAirQualityServiceClient.getWeatherAirQualityData(lat, lon);
             log.info("Weather air quality data retrieved for city: {}", 
                 weatherAirQualityData != null ? weatherAirQualityData.getCityName() : "Unknown");
 
-            // 4. ML modeli için request hazırla
-            ModelPredictionRequest mlRequest = prepareMLRequest(userGroup, pollenData, weatherAirQualityData);
+            // 5. ML modeli için request hazırla
+            ModelPredictionRequest mlRequest = prepareMLRequest(userPreferenceResponse, pollenData, weatherAirQualityData);
 
-            // 5. ML modelinden prediction al
+            // 6. ML modelinden prediction al
             ModelPredictionResponse mlResponse = mlModelClient.getPrediction(mlRequest);
 
-            // 6. Final response hazırla
-            return buildAllerMindResponse(lat, lon, userSettings.getUserId(), userGroup, mlResponse);
+            // 7. Final response hazırla
+            return buildAllerMindResponse(lat, lon, userId.toString(), userGroup, mlResponse);
 
         } catch (Exception e) {
             log.error("Error processing AllerMind request: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to process AllerMind request", e);
         }
     }
+    
+    private UserGroup convertToUserGroup(AllergyClassificationResponse response) {
+        // AllergyClassificationResponse'dan UserGroup'a dönüştürme
+        String riskLevel = determineRiskLevel(response.getGroupId());
+        
+        return UserGroup.builder()
+                .groupId(response.getGroupId().toString())
+                .riskLevel(riskLevel)
+                .riskScore(response.getModelWeight() != null ? response.getModelWeight().doubleValue() : 0.0)
+                .groupDescription(response.getGroupDescription())
+                .build();
+    }
+    
+    private String determineRiskLevel(Integer groupId) {
+        // Grup ID'ye göre risk seviyesi belirleme
+        return switch (groupId) {
+            case 1 -> "CRITICAL";  // Şiddetli Alerjik Grup
+            case 2 -> "HIGH";      // Hafif-Orta Alerjik Grup
+            case 3 -> "MEDIUM";    // Genetik Yatkınlık Grubu
+            case 4 -> "MEDIUM";    // Teşhis Almamış Grup
+            case 5 -> "HIGH";      // Hassas Çocuk/Yaşlı Grubu
+            default -> "LOW";
+        };
+    }
 
-    private ModelPredictionRequest prepareMLRequest(UserGroup userGroup, 
+    private ModelPredictionRequest prepareMLRequest(AllergyClassificationResponse userClassificationResponse, 
                                                    List<PollenResponse> pollenData, 
                                                    WeatherAirQualityResponse weatherAirQualityData) {
         
-        Map<String, Object> additionalFeatures = new HashMap<>();
-        
-        // Pollen verilerinden özellikler çıkar
-        if (pollenData != null && !pollenData.isEmpty()) {
-            double avgUpiValue = pollenData.stream()
-                .filter(p -> p.getUpiValue() != null)
-                .mapToDouble(PollenResponse::getUpiValue)
-                .average()
-                .orElse(0.0);
-            additionalFeatures.put("avgPollenUpi", avgUpiValue);
-            
-            long inSeasonCount = pollenData.stream()
-                .filter(p -> Boolean.TRUE.equals(p.getInSeason()))
-                .count();
-            additionalFeatures.put("inSeasonPollenCount", inSeasonCount);
-        }
-
-        // Hava durumu verilerinden özellikler çıkar
-        if (weatherAirQualityData != null && weatherAirQualityData.getWeatherRecord() != null) {
-            WeatherRecord weather = weatherAirQualityData.getWeatherRecord();
-            additionalFeatures.put("temperature", weather.getTemperature2m());
-            additionalFeatures.put("humidity", weather.getRelativeHumidity2m());
-            additionalFeatures.put("windSpeed", weather.getWindSpeed10m());
-        }
-
-        // Hava kalitesi verilerinden özellikler çıkar
-        if (weatherAirQualityData != null && weatherAirQualityData.getAirQualityRecord() != null) {
-            AirQualityRecord airQuality = weatherAirQualityData.getAirQualityRecord();
-            additionalFeatures.put("pm25", airQuality.getPm25());
-            additionalFeatures.put("pm10", airQuality.getPm10());
-            additionalFeatures.put("ozone", airQuality.getOzone());
-            additionalFeatures.put("uvIndex", airQuality.getUvIndex());
-        }
+        // Environmental data hazırla
+        ModelPredictionRequest.EnvironmentalData environmentalData = ModelPredictionRequest.EnvironmentalData.builder()
+                .airQuality(buildAirQualityData(weatherAirQualityData))
+                .pollen(buildPollenData(pollenData))
+                .weather(buildWeatherData(weatherAirQualityData))
+                .build();
 
         return ModelPredictionRequest.builder()
-                .userGroup(userGroup)
-                .pollenData(pollenData)
-                .weatherAirQualityData(weatherAirQualityData)
-                .additionalFeatures(additionalFeatures)
+                .userClassification(userClassificationResponse)
+                .environmentalData(environmentalData)
+                .build();
+    }
+    
+    private ModelPredictionRequest.AirQualityData buildAirQualityData(WeatherAirQualityResponse weatherAirQualityData) {
+        if (weatherAirQualityData == null || weatherAirQualityData.getAirQualityRecord() == null) {
+            return ModelPredictionRequest.AirQualityData.builder()
+                    .pm25(0.0)
+                    .pm10(0.0)  
+                    .o3(0.0)
+                    .no2(0.0)
+                    .so2(0.0)
+                    .co(0.0)
+                    .build();
+        }
+        
+        AirQualityRecord airQuality = weatherAirQualityData.getAirQualityRecord();
+        return ModelPredictionRequest.AirQualityData.builder()
+                .pm25(airQuality.getPm25() != null ? airQuality.getPm25().doubleValue() : 0.0)
+                .pm10(airQuality.getPm10() != null ? airQuality.getPm10().doubleValue() : 0.0)
+                .o3(airQuality.getOzone() != null ? airQuality.getOzone().doubleValue() : 0.0)
+                .no2(airQuality.getNitrogenDioxide() != null ? airQuality.getNitrogenDioxide().doubleValue() : 0.0)
+                .so2(airQuality.getSulphurDioxide() != null ? airQuality.getSulphurDioxide().doubleValue() : 0.0)
+                .co(airQuality.getCarbonMonoxide() != null ? airQuality.getCarbonMonoxide().doubleValue() : 0.0)
+                .build();
+    }
+    
+    private ModelPredictionRequest.PollenData buildPollenData(List<PollenResponse> pollenData) {
+        if (pollenData == null || pollenData.isEmpty()) {
+            return ModelPredictionRequest.PollenData.builder()
+                    .totalUpi(0.0)
+                    .treePollen(0.0)
+                    .grassPollen(0.0)
+                    .weedPollen(0.0)
+                    .inSeasonCount(0)
+                    .diversityIndex(0.0)
+                    .build();
+        }
+        
+        double totalUpi = pollenData.stream()
+                .filter(p -> p.getUpiValue() != null)
+                .mapToDouble(p -> p.getUpiValue().doubleValue())
+                .sum();
+                
+        long inSeasonCount = pollenData.stream()
+                .filter(p -> Boolean.TRUE.equals(p.getInSeason()))
+                .count();
+                
+        // Pollen kategorilerini pollen code'a göre belirle (basit kategorilendirme)
+        double treePollen = pollenData.stream()
+                .filter(p -> p.getUpiValue() != null && p.getPollenCode() != null && 
+                            (p.getPollenCode().toLowerCase().contains("tree") || 
+                             p.getPollenCode().toLowerCase().contains("birch") ||
+                             p.getPollenCode().toLowerCase().contains("oak") ||
+                             p.getPollenCode().toLowerCase().contains("pine")))
+                .mapToDouble(p -> p.getUpiValue().doubleValue())
+                .sum();
+                
+        double grassPollen = pollenData.stream()
+                .filter(p -> p.getUpiValue() != null && p.getPollenCode() != null && 
+                            (p.getPollenCode().toLowerCase().contains("grass") ||
+                             p.getPollenCode().toLowerCase().contains("graminales")))
+                .mapToDouble(p -> p.getUpiValue().doubleValue())
+                .sum();
+                
+        double weedPollen = pollenData.stream()
+                .filter(p -> p.getUpiValue() != null && p.getPollenCode() != null && 
+                            (p.getPollenCode().toLowerCase().contains("weed") ||
+                             p.getPollenCode().toLowerCase().contains("ragweed") ||
+                             p.getPollenCode().toLowerCase().contains("mugwort")))
+                .mapToDouble(p -> p.getUpiValue().doubleValue())
+                .sum();
+        
+        double diversityIndex = !pollenData.isEmpty() ? (double) inSeasonCount / pollenData.size() : 0.0;
+        
+        return ModelPredictionRequest.PollenData.builder()
+                .totalUpi(totalUpi)
+                .treePollen(treePollen)
+                .grassPollen(grassPollen)
+                .weedPollen(weedPollen)
+                .inSeasonCount((int) inSeasonCount)
+                .diversityIndex(diversityIndex)
+                .build();
+    }
+    
+    private ModelPredictionRequest.WeatherData buildWeatherData(WeatherAirQualityResponse weatherAirQualityData) {
+        if (weatherAirQualityData == null || weatherAirQualityData.getWeatherRecord() == null) {
+            return ModelPredictionRequest.WeatherData.builder()
+                    .temperature(0.0)
+                    .humidity(0.0)
+                    .windSpeed(0.0)
+                    .pressure(0.0)
+                    .build();
+        }
+        
+        WeatherRecord weather = weatherAirQualityData.getWeatherRecord();
+        return ModelPredictionRequest.WeatherData.builder()
+                .temperature(weather.getTemperature2m() != null ? weather.getTemperature2m().doubleValue() : 0.0)
+                .humidity(weather.getRelativeHumidity2m() != null ? weather.getRelativeHumidity2m().doubleValue() : 0.0)
+                .windSpeed(weather.getWindSpeed10m() != null ? weather.getWindSpeed10m().doubleValue() : 0.0)
+                .pressure(weather.getSurfacePressure() != null ? weather.getSurfacePressure().doubleValue() : 0.0)
                 .build();
     }
 
     private AllerMindResponse buildAllerMindResponse(String lat, String lon, String userId,
                                                     UserGroup userGroup, ModelPredictionResponse mlResponse) {
         
-        // En yüksek risk skoruna sahip grubu bul
-        String overallRiskLevel = "LOW";
-        String overallRiskEmoji = "🟢";
-        Integer overallRiskCode = 1;
-        Double overallRiskScore = 0.0;
+        // Python API'den gelen yeni response formatını kullan
+        String overallRiskLevel = mlResponse.getRiskLevel() != null ? mlResponse.getRiskLevel() : "LOW";
+        String overallRiskEmoji = determineRiskEmoji(overallRiskLevel);
+        Integer overallRiskCode = determineRiskCode(overallRiskLevel);
+        Double overallRiskScore = mlResponse.getRiskScore() != null ? mlResponse.getRiskScore() : 0.0;
         
-        if (mlResponse.getPredictions() != null && !mlResponse.getPredictions().isEmpty()) {
-            ModelPredictionResponse.GroupResult highestRiskGroup = mlResponse.getPredictions().stream()
-                .max((g1, g2) -> Double.compare(g1.getPredictionValue(), g2.getPredictionValue()))
-                .orElse(null);
-                
-            if (highestRiskGroup != null) {
-                overallRiskLevel = highestRiskGroup.getRiskLevel();
-                overallRiskEmoji = highestRiskGroup.getRiskEmoji();
-                overallRiskCode = highestRiskGroup.getRiskCode();
-                overallRiskScore = highestRiskGroup.getPredictionValue();
-            }
+        // Backward compatibility için predictions oluştur
+        if (mlResponse.getPredictions() == null && mlResponse.getRiskScore() != null) {
+            ModelPredictionResponse.GroupResult groupResult = ModelPredictionResponse.GroupResult.builder()
+                .groupId(Integer.valueOf(userGroup.getGroupId()))
+                .groupName(userGroup.getGroupDescription())
+                .predictionValue(mlResponse.getRiskScore())
+                .riskLevel(overallRiskLevel)
+                .riskEmoji(overallRiskEmoji)
+                .riskCode(overallRiskCode)
+                .build();
+            mlResponse.setPredictions(List.of(groupResult));
         }
         
         return AllerMindResponse.builder()
@@ -148,5 +246,25 @@ public class AllerMindModelService {
                 .modelPrediction(mlResponse)
                 .userGroup(userGroup)
                 .build();
+    }
+    
+    private String determineRiskEmoji(String riskLevel) {
+        return switch (riskLevel.toUpperCase()) {
+            case "CRITICAL" -> "🔴";
+            case "HIGH" -> "🟠";
+            case "MEDIUM" -> "🟡";
+            case "LOW" -> "🟢";
+            default -> "⚪";
+        };
+    }
+    
+    private Integer determineRiskCode(String riskLevel) {
+        return switch (riskLevel.toUpperCase()) {
+            case "CRITICAL" -> 4;
+            case "HIGH" -> 3;
+            case "MEDIUM" -> 2;
+            case "LOW" -> 1;
+            default -> 0;
+        };
     }
 }

@@ -18,24 +18,70 @@ public class ModelPredictionResponse {
     private Boolean success;
     private String message;
     private String error;
-    private LocationInfo location;
-    @JsonProperty("user_group")
-    private UserGroup userGroup;
-    private List<GroupResult> predictions;
-    private PredictionSummary summary;
-    @JsonProperty("environmental_data")
-    private Map<String, Object> environmentalData;
     private String timestamp;
+    
+    @JsonProperty("riskScore")
+    private Double riskScore;
+    
+    @JsonProperty("riskLevel")
+    private String riskLevel;
+    
+    private Double confidence;
+    
+    @JsonProperty("userGroup")
+    private UserGroupInfo userGroup;
+    
+    @JsonProperty("contributingFactors")
+    private Map<String, Double> contributingFactors;
+    
+    private List<String> recommendations;
+    
+    @JsonProperty("environmentalRisks")
+    private Map<String, Double> environmentalRisks;
+    
+    @JsonProperty("personalModifiers")
+    private Map<String, Double> personalModifiers;
+    
+    @JsonProperty("immunologicProfile")
+    private Map<String, Object> immunologicProfile;
+    
+    @JsonProperty("environmentalSensitivityFactors")
+    private Map<String, Boolean> environmentalSensitivityFactors;
+    
+    @JsonProperty("pollenSpecificRisks")
+    private Map<String, Object> pollenSpecificRisks;
+    
+    @JsonProperty("dataQualityScore")
+    private Double dataQualityScore;
+    
+    @JsonProperty("modelVersion")
+    private String modelVersion;
+    
+    @JsonProperty("predictionTimestamp")
+    private String predictionTimestamp;
+    
+    // Legacy fields for backward compatibility
+    private List<GroupResult> predictions;
     
     @Data
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class LocationInfo {
-        private Double latitude;
-        private Double longitude;
-        @JsonProperty("city_name")
-        private String cityName;
+    public static class UserGroupInfo {
+        @JsonProperty("groupId")
+        private String groupId;
+        
+        @JsonProperty("groupName")
+        private String groupName;
+        
+        @JsonProperty("description")
+        private String description;
+        
+        @JsonProperty("assignmentReason")
+        private String assignmentReason;
+        
+        @JsonProperty("modelWeight")
+        private Double modelWeight;
     }
     
     @Data

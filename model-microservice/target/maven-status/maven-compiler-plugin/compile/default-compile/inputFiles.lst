@@ -1,11 +1,13 @@
 /Users/elifdy/Desktop/allermind/aller-mind/model-microservice/src/main/java/com/allermind/model/ModelServiceApplication.java
 /Users/elifdy/Desktop/allermind/aller-mind/model-microservice/src/main/java/com/allermind/model/client/MachineLearningModelClient.java
 /Users/elifdy/Desktop/allermind/aller-mind/model-microservice/src/main/java/com/allermind/model/client/PollenServiceClient.java
+/Users/elifdy/Desktop/allermind/aller-mind/model-microservice/src/main/java/com/allermind/model/client/UserPreferenceServiceClient.java
 /Users/elifdy/Desktop/allermind/aller-mind/model-microservice/src/main/java/com/allermind/model/client/WeatherAirQualityServiceClient.java
 /Users/elifdy/Desktop/allermind/aller-mind/model-microservice/src/main/java/com/allermind/model/config/RestClientConfig.java
 /Users/elifdy/Desktop/allermind/aller-mind/model-microservice/src/main/java/com/allermind/model/controller/ModelController.java
 /Users/elifdy/Desktop/allermind/aller-mind/model-microservice/src/main/java/com/allermind/model/dto/AirQualityRecord.java
 /Users/elifdy/Desktop/allermind/aller-mind/model-microservice/src/main/java/com/allermind/model/dto/AllerMindResponse.java
+/Users/elifdy/Desktop/allermind/aller-mind/model-microservice/src/main/java/com/allermind/model/dto/AllergyClassificationResponse.java
 /Users/elifdy/Desktop/allermind/aller-mind/model-microservice/src/main/java/com/allermind/model/dto/ModelPredictionRequest.java
 /Users/elifdy/Desktop/allermind/aller-mind/model-microservice/src/main/java/com/allermind/model/dto/ModelPredictionResponse.java
 /Users/elifdy/Desktop/allermind/aller-mind/model-microservice/src/main/java/com/allermind/model/dto/PlantDataDto.java
