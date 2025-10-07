@@ -186,6 +186,10 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> with WidgetsB
 
   void _showPredictionResults(Map<String, dynamic> prediction) {
     try {
+      // Debug print - JSON'u console'a yazdır
+      print('🔍 Received prediction JSON:');
+      print(prediction);
+      
       // Parse the prediction response
       final predictionResponse = PredictionResponse.fromJson(prediction);
       
@@ -198,18 +202,43 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> with WidgetsB
           ),
         ),
       );
-    } catch (e) {
-      // Fallback to simple dialog if parsing fails
+    } catch (e, stackTrace) {
+      // Enhanced error handling with detailed logging
+      print('❌ JSON Parsing Error: $e');
+      print('📋 Stack Trace: $stackTrace');
+      print('📄 Raw JSON: $prediction');
+      
+      // Show error dialog with more details
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Tahmin Sonucu'),
+          title: const Text('Parsing Hatası'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Tahmin sonuçları:\n${prediction.toString()}'),
+                Text('Hata: $e'),
+                const SizedBox(height: 16),
+                const Text(
+                  'Raw JSON Data:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    prediction.toString(),
+                    style: const TextStyle(
+                      fontFamily: 'monospace',
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

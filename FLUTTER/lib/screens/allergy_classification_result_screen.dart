@@ -186,14 +186,132 @@ class AllergyClassificationResultScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            _buildProfileItem('IgE Seviyesi', response.immunologicProfile.igeLevel, Icons.science),
-            _buildProfileItem('Antihistaminik Yanıt', response.immunologicProfile.antihistamineResponse, Icons.medication),
-            _buildProfileItem('İnflamatuar Yanıt', response.immunologicProfile.inflammatoryResponse, Icons.local_fire_department),
-            _buildProfileItem('Mevsimsel Patern', response.immunologicProfile.seasonalPattern, Icons.calendar_month),
+            ..._buildDynamicProfileItems(),
           ],
         ),
       ),
     );
+  }
+
+  List<Widget> _buildDynamicProfileItems() {
+    List<Widget> items = [];
+    final profile = response.immunologicProfile;
+    
+    // Ana 4 alan - sadece dolu olanları göster
+    if (profile.igeLevel.isNotEmpty) {
+      items.add(_buildProfileItem('IgE Seviyesi', _translateProfileValue(profile.igeLevel), Icons.science));
+    }
+    
+    if (profile.antihistamineResponse.isNotEmpty) {
+      items.add(_buildProfileItem('Antihistaminik Yanıt', _translateProfileValue(profile.antihistamineResponse), Icons.medication));
+    }
+    
+    if (profile.inflammatoryResponse.isNotEmpty) {
+      items.add(_buildProfileItem('İnflamatuar Yanıt', _translateProfileValue(profile.inflammatoryResponse), Icons.local_fire_department));
+    }
+    
+    if (profile.seasonalPattern.isNotEmpty) {
+      items.add(_buildProfileItem('Mevsimsel Patern', _translateProfileValue(profile.seasonalPattern), Icons.calendar_month));
+    }
+    
+    // SEVERE_ALLERGIC grubu için ek alanlar
+    if (profile.th2Activation != null && profile.th2Activation!.isNotEmpty) {
+      items.add(_buildProfileItem('TH2 Aktivasyonu', _translateProfileValue(profile.th2Activation!), Icons.biotech));
+    }
+    
+    if (profile.mastCellDegranulation != null && profile.mastCellDegranulation!.isNotEmpty) {
+      items.add(_buildProfileItem('Mast Hücre Degranülasyonu', _translateProfileValue(profile.mastCellDegranulation!), Icons.scatter_plot));
+    }
+    
+    if (profile.cytokineProfile != null && profile.cytokineProfile!.isNotEmpty) {
+      items.add(_buildProfileItem('Sitokin Profili', profile.cytokineProfile!.join(', '), Icons.coronavirus));
+    }
+    
+    // GENETIC_PREDISPOSITION grubu için ek alanlar
+    if (profile.atopicStructure != null) {
+      items.add(_buildProfileItem('Atopik Yapı', profile.atopicStructure! ? 'Var' : 'Yok', Icons.medical_information));
+    }
+    
+    if (profile.familyLoading != null) {
+      items.add(_buildProfileItem('Aile Yükü', profile.familyLoading! ? 'Var' : 'Yok', Icons.family_restroom));
+    }
+    
+    if (profile.igeProductionCapacity != null && profile.igeProductionCapacity!.isNotEmpty) {
+      items.add(_buildProfileItem('IgE Üretim Kapasitesi', _translateProfileValue(profile.igeProductionCapacity!), Icons.precision_manufacturing));
+    }
+    
+    if (profile.th1Th2Imbalance != null) {
+      items.add(_buildProfileItem('TH1/TH2 Dengesizliği', profile.th1Th2Imbalance! ? 'Var' : 'Yok', Icons.scale));
+    }
+    
+    if (profile.sensitizationRisk != null && profile.sensitizationRisk!.isNotEmpty) {
+      items.add(_buildProfileItem('Sensitizasyon Riski', _translateProfileValue(profile.sensitizationRisk!), Icons.warning));
+    }
+    
+    // UNDIAGNOSED grubu için ek alanlar
+    if (profile.sensitization != null && profile.sensitization!.isNotEmpty) {
+      items.add(_buildProfileItem('Sensitizasyon', _translateProfileValue(profile.sensitization!), Icons.help));
+    }
+    
+    if (profile.environmentalTriggers != null) {
+      items.add(_buildProfileItem('Çevresel Tetikleyiciler', profile.environmentalTriggers! ? 'Var' : 'Yok', Icons.eco));
+    }
+    
+    // VULNERABLE_POPULATION grubu için ek alanlar
+    if (profile.immuneSystem != null && profile.immuneSystem!.isNotEmpty) {
+      items.add(_buildProfileItem('Bağışıklık Sistemi', _translateProfileValue(profile.immuneSystem!), Icons.shield));
+    }
+    
+    if (profile.immuneTolerance != null && profile.immuneTolerance!.isNotEmpty) {
+      items.add(_buildProfileItem('Bağışıklık Toleransı', _translateProfileValue(profile.immuneTolerance!), Icons.security));
+    }
+    
+    if (profile.multisystemRisk != null && profile.multisystemRisk!.isNotEmpty) {
+      items.add(_buildProfileItem('Multisistem Riski', _translateProfileValue(profile.multisystemRisk!), Icons.medical_services));
+    }
+    
+    return items;
+  }
+  
+  String _translateProfileValue(String value) {
+    final translations = {
+      // IgE Levels
+      'very_high': 'Çok Yüksek',
+      'moderate_high': 'Orta-Yüksek',
+      'normal_borderline': 'Normal-Sınırda',
+      'high': 'Yüksek',
+      'low': 'Düşük',
+      'normal': 'Normal',
+      
+      // Responses
+      'good': 'İyi',
+      'poor': 'Zayıf',
+      'excellent': 'Mükemmel',
+      'moderate': 'Orta',
+      
+      // Activation/Response Levels
+      'maximal': 'Maksimal',
+      'local': 'Lokal',
+      'non_specific': 'Spesifik Olmayan',
+      'rapid_widespread': 'Hızlı Yaygın',
+      'increased': 'Artmış',
+      
+      // Patterns
+      'rhinitis': 'Rinit',
+      'asthma': 'Astım',
+      'eczema': 'Egzama',
+      
+      // Clarity
+      'unclear': 'Belirsiz',
+      'clear': 'Net',
+      
+      // System Status
+      'immature_aged': 'Olgunlaşmamış/Yaşlı',
+      'mature': 'Olgun',
+      'compromised': 'Bozulmuş',
+    };
+    
+    return translations[value.toLowerCase()] ?? value.toUpperCase();
   }
 
   Widget _buildProfileItem(String label, String value, IconData icon) {
@@ -210,7 +328,7 @@ class AllergyClassificationResultScreen extends StatelessWidget {
             ),
           ),
           Text(
-            value.toUpperCase(),
+            value,
             style: TextStyle(
               color: Colors.grey.shade700,
               fontWeight: FontWeight.bold,

@@ -95,16 +95,51 @@ class EnvironmentalSensitivityFactors {
 }
 
 class ImmunologicProfile {
+  // Ana 4 alan (mevcut)
   final String inflammatoryResponse;
   final String igeLevel;
   final String antihistamineResponse;
   final String seasonalPattern;
+  
+  // SEVERE_ALLERGIC grubu için ek alanlar
+  final String? th2Activation;
+  final String? mastCellDegranulation;
+  final List<String>? cytokineProfile;
+  
+  // GENETIC_PREDISPOSITION grubu için ek alanlar
+  final bool? atopicStructure;
+  final bool? familyLoading;
+  final String? igeProductionCapacity;
+  final bool? th1Th2Imbalance;
+  final String? sensitizationRisk;
+  
+  // UNDIAGNOSED grubu için ek alanlar
+  final String? sensitization;
+  final bool? environmentalTriggers;
+  
+  // VULNERABLE_POPULATION grubu için ek alanlar
+  final String? immuneSystem;
+  final String? immuneTolerance;
+  final String? multisystemRisk;
 
   ImmunologicProfile({
     required this.inflammatoryResponse,
     required this.igeLevel,
     required this.antihistamineResponse,
     required this.seasonalPattern,
+    this.th2Activation,
+    this.mastCellDegranulation,
+    this.cytokineProfile,
+    this.atopicStructure,
+    this.familyLoading,
+    this.igeProductionCapacity,
+    this.th1Th2Imbalance,
+    this.sensitizationRisk,
+    this.sensitization,
+    this.environmentalTriggers,
+    this.immuneSystem,
+    this.immuneTolerance,
+    this.multisystemRisk,
   });
 
   factory ImmunologicProfile.fromJson(Map<String, dynamic> json) {
@@ -113,6 +148,21 @@ class ImmunologicProfile {
       igeLevel: json['ige_level'] ?? '',
       antihistamineResponse: json['antihistamine_response'] ?? '',
       seasonalPattern: json['seasonal_pattern'] ?? '',
+      th2Activation: json['th2_activation'],
+      mastCellDegranulation: json['mast_cell_degranulation'],
+      cytokineProfile: json['cytokine_profile'] != null 
+          ? List<String>.from(json['cytokine_profile']) 
+          : null,
+      atopicStructure: json['atopic_structure'],
+      familyLoading: json['family_loading'],
+      igeProductionCapacity: json['ige_production_capacity'],
+      th1Th2Imbalance: json['th1_th2_imbalance'],
+      sensitizationRisk: json['sensitization_risk'],
+      sensitization: json['sensitization'],
+      environmentalTriggers: json['environmental_triggers'],
+      immuneSystem: json['immune_system'],
+      immuneTolerance: json['immune_tolerance'],
+      multisystemRisk: json['multisystem_risk'],
     );
   }
 
@@ -122,6 +172,19 @@ class ImmunologicProfile {
       'ige_level': igeLevel,
       'antihistamine_response': antihistamineResponse,
       'seasonal_pattern': seasonalPattern,
+      if (th2Activation != null) 'th2_activation': th2Activation,
+      if (mastCellDegranulation != null) 'mast_cell_degranulation': mastCellDegranulation,
+      if (cytokineProfile != null) 'cytokine_profile': cytokineProfile,
+      if (atopicStructure != null) 'atopic_structure': atopicStructure,
+      if (familyLoading != null) 'family_loading': familyLoading,
+      if (igeProductionCapacity != null) 'ige_production_capacity': igeProductionCapacity,
+      if (th1Th2Imbalance != null) 'th1_th2_imbalance': th1Th2Imbalance,
+      if (sensitizationRisk != null) 'sensitization_risk': sensitizationRisk,
+      if (sensitization != null) 'sensitization': sensitization,
+      if (environmentalTriggers != null) 'environmental_triggers': environmentalTriggers,
+      if (immuneSystem != null) 'immune_system': immuneSystem,
+      if (immuneTolerance != null) 'immune_tolerance': immuneTolerance,
+      if (multisystemRisk != null) 'multisystem_risk': multisystemRisk,
     };
   }
 }

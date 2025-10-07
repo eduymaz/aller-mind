@@ -26,8 +26,8 @@ class PredictionResponse {
       success: json['success'] ?? false,
       message: json['message'],
       overallRiskScore: (json['overallRiskScore'] ?? 0.0).toDouble(),
-      overallRiskLevel: json['overallRiskLevel'] ?? '',
-      overallRiskEmoji: json['overallRiskEmoji'] ?? '',
+      overallRiskLevel: json['overallRiskLevel'] ?? 'Orta',
+      overallRiskEmoji: json['overallRiskEmoji'] ?? '🟡',
       modelPrediction: ModelPrediction.fromJson(json['modelPrediction'] ?? {}),
     );
   }
@@ -43,6 +43,14 @@ class ModelPrediction {
   final double riskScore;
   final String riskLevel;
   final UserGroup userGroup;
+  final Map<String, dynamic>? contributingFactors;
+  final Map<String, dynamic>? environmentalRisks;
+  final Map<String, dynamic>? personalModifiers;
+  final Map<String, dynamic>? immunologicProfile;
+  final Map<String, dynamic>? environmentalSensitivityFactors;
+  final Map<String, dynamic>? pollenSpecificRisks;
+  final double dataQualityScore;
+  final String modelVersion;
 
   ModelPrediction({
     required this.success,
@@ -54,6 +62,14 @@ class ModelPrediction {
     required this.riskScore,
     required this.riskLevel,
     required this.userGroup,
+    this.contributingFactors,
+    this.environmentalRisks,
+    this.personalModifiers,
+    this.immunologicProfile,
+    this.environmentalSensitivityFactors,
+    this.pollenSpecificRisks,
+    required this.dataQualityScore,
+    required this.modelVersion,
   });
 
   factory ModelPrediction.fromJson(Map<String, dynamic> json) {
@@ -61,12 +77,20 @@ class ModelPrediction {
       success: json['success'] ?? false,
       message: json['message'],
       error: json['error'],
-      timestamp: json['timestamp'] ?? '',
+      timestamp: json['timestamp'] ?? json['predictionTimestamp'] ?? '',
       confidence: (json['confidence'] ?? 0.0).toDouble(),
       recommendations: List<String>.from(json['recommendations'] ?? []),
       riskScore: (json['riskScore'] ?? 0.0).toDouble(),
-      riskLevel: json['riskLevel'] ?? '',
+      riskLevel: json['riskLevel'] ?? 'Orta',
       userGroup: UserGroup.fromJson(json['userGroup'] ?? {}),
+      contributingFactors: json['contributingFactors'],
+      environmentalRisks: json['environmentalRisks'],
+      personalModifiers: json['personalModifiers'],
+      immunologicProfile: json['immunologicProfile'],
+      environmentalSensitivityFactors: json['environmentalSensitivityFactors'],
+      pollenSpecificRisks: json['pollenSpecificRisks'],
+      dataQualityScore: (json['dataQualityScore'] ?? 1.0).toDouble(),
+      modelVersion: json['modelVersion'] ?? 'Expert-v2.0',
     );
   }
 }
@@ -88,11 +112,11 @@ class UserGroup {
 
   factory UserGroup.fromJson(Map<String, dynamic> json) {
     return UserGroup(
-      groupId: json['groupId'] ?? '',
-      groupName: json['groupName'] ?? '',
-      description: json['description'] ?? '',
-      assignmentReason: json['assignmentReason'] ?? '',
-      modelWeight: (json['modelWeight'] ?? 0.0).toDouble(),
+      groupId: json['groupId']?.toString() ?? '',
+      groupName: json['groupName'] ?? 'Model Grubu',
+      description: json['description'] ?? json['groupDescription'] ?? '',
+      assignmentReason: json['assignmentReason'] ?? 'Otomatik sınıflandırma',
+      modelWeight: (json['modelWeight'] ?? json['riskScore'] ?? 0.0).toDouble(),
     );
   }
 }
