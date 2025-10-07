@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/allergy_classification_response.dart';
 import '../models/allergy_profile_request.dart';
+import 'detailed_profile_form_screen.dart';
+import 'user_selection_screen.dart';
 
 class AllergyClassificationResultScreen extends StatelessWidget {
   final AllergyClassificationResponse response;
@@ -53,6 +55,16 @@ class AllergyClassificationResultScreen extends StatelessWidget {
         title: const Text('Alerji Analiz Sonucu'),
         backgroundColor: _getGroupColor(),
         foregroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const UserSelectionScreen()),
+              (route) => false,
+            );
+          },
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -229,31 +241,57 @@ class AllergyClassificationResultScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            if (response.pollenSpecificRisks.highRiskPollens.isNotEmpty) ...[
-              _buildRiskSection(
-                'Yüksek Risk Polenleri',
-                response.pollenSpecificRisks.highRiskPollens,
-                Colors.red.shade600,
-                Icons.dangerous,
+            if (response.pollenSpecificRisks.highRiskPollens.isEmpty && 
+                response.pollenSpecificRisks.moderateRiskPollens.isEmpty && 
+                response.pollenSpecificRisks.crossReactiveFoods.isEmpty) ...[
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade50,
+                  borderRadius: BorderRadius.circular(8.0),
+                  border: Border.all(color: Colors.blue.shade200),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.info_outline, color: Colors.blue.shade600),
+                    const SizedBox(width: 12),
+                    const Expanded(
+                      child: Text(
+                        'Polen riski yoktur. Mevcut veriler doğrultusunda herhangi bir polen alerjisi riski tespit edilmemiştir.',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 12),
-            ],
-            if (response.pollenSpecificRisks.moderateRiskPollens.isNotEmpty) ...[
-              _buildRiskSection(
-                'Orta Risk Polenleri',
-                response.pollenSpecificRisks.moderateRiskPollens,
-                Colors.orange.shade600,
-                Icons.warning,
-              ),
-              const SizedBox(height: 12),
-            ],
-            if (response.pollenSpecificRisks.crossReactiveFoods.isNotEmpty) ...[
-              _buildRiskSection(
-                'Çapraz Reaktif Besinler',
-                response.pollenSpecificRisks.crossReactiveFoods,
-                Colors.blue.shade600,
-                Icons.restaurant,
-              ),
+            ] else ...[
+              if (response.pollenSpecificRisks.highRiskPollens.isNotEmpty) ...[
+                _buildRiskSection(
+                  'Yüksek Risk Polenleri',
+                  response.pollenSpecificRisks.highRiskPollens,
+                  Colors.red.shade600,
+                  Icons.dangerous,
+                ),
+                const SizedBox(height: 12),
+              ],
+              if (response.pollenSpecificRisks.moderateRiskPollens.isNotEmpty) ...[
+                _buildRiskSection(
+                  'Orta Risk Polenleri',
+                  response.pollenSpecificRisks.moderateRiskPollens,
+                  Colors.orange.shade600,
+                  Icons.warning,
+                ),
+                const SizedBox(height: 12),
+              ],
+              if (response.pollenSpecificRisks.crossReactiveFoods.isNotEmpty) ...[
+                _buildRiskSection(
+                  'Çapraz Reaktif Besinler',
+                  response.pollenSpecificRisks.crossReactiveFoods,
+                  Colors.blue.shade600,
+                  Icons.restaurant,
+                ),
+              ],
             ],
           ],
         ),
@@ -575,8 +613,11 @@ class AllergyClassificationResultScreen extends StatelessWidget {
           width: double.infinity,
           child: ElevatedButton.icon(
             onPressed: () {
-              // Navigate back to home or create a new profile
-              Navigator.popUntil(context, (route) => route.isFirst);
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const UserSelectionScreen()),
+                (route) => false,
+              );
             },
             icon: const Icon(Icons.home),
             label: const Text('Ana Sayfaya Dön'),
@@ -592,11 +633,18 @@ class AllergyClassificationResultScreen extends StatelessWidget {
           width: double.infinity,
           child: OutlinedButton.icon(
             onPressed: () {
-              // Share or save the report
-              _showShareDialog(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailedProfileFormScreen(
+                    existingRequest: request,
+                    isEditing: true,
+                  ),
+                ),
+              );
             },
-            icon: const Icon(Icons.share),
-            label: const Text('Raporu Paylaş'),
+            icon: const Icon(Icons.edit),
+            label: const Text('Profil Güncelle'),
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
               side: BorderSide(color: _getGroupColor()),
@@ -608,21 +656,5 @@ class AllergyClassificationResultScreen extends StatelessWidget {
     );
   }
 
-  void _showShareDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Raporu Paylaş'),
-        content: const Text(
-          'Bu özellik yakında aktif olacak. Raporu kaydetmek veya paylaşmak için lütfen bekleyiniz.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Tamam'),
-          ),
-        ],
-      ),
-    );
-  }
+
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/allergy_profile_request.dart';
 import '../models/allergy_classification_response.dart';
+import '../models/user_profile_response.dart';
 
 class AllergyClassificationService {
   static const String _baseUrl = 'http://localhost:9191';
@@ -70,6 +71,105 @@ class AllergyClassificationService {
       return response.statusCode == 200;
     } catch (e) {
       return false;
+    }
+  }
+
+  /// Get user profile by user preference ID
+  static Future<UserProfileResponse> getUserProfile(String userPreferenceId) async {
+    try {
+      final url = Uri.parse('$_baseUrl/api/v1/allergy-classification/user/$userPreferenceId');
+      
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+        return UserProfileResponse.fromJson(jsonResponse);
+      } else if (response.statusCode == 404) {
+        throw AllergyClassificationException(
+          'Kullanıcı profili bulunamadı.',
+          response.statusCode,
+        );
+      } else if (response.statusCode == 500) {
+        throw AllergyClassificationException(
+          'Sunucu hatası. Lütfen daha sonra tekrar deneyin.',
+          response.statusCode,
+        );
+      } else {
+        throw AllergyClassificationException(
+          'Beklenmeyen hata: ${response.statusCode}',
+          response.statusCode,
+        );
+      }
+    } catch (e) {
+      if (e is AllergyClassificationException) {
+        rethrow;
+      }
+      
+      // Network or other errors
+      throw AllergyClassificationException(
+        'Bağlantı hatası: Sunucuya erişilemiyor. İnternet bağlantınızı ve sunucu durumunu kontrol edin.',
+        -1,
+      );
+    }
+  }
+
+  /// Get prediction for user based on location and user ID
+  static Future<Map<String, dynamic>> getPrediction({
+    required double latitude,
+    required double longitude,
+    required String userId,
+  }) async {
+    try {
+      final url = Uri.parse(
+        'http://localhost:8484/api/v1/model/prediction?lat=$latitude&lon=$longitude&userId=$userId'
+      );
+      
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+        return jsonResponse;
+      } else if (response.statusCode == 400) {
+        throw AllergyClassificationException(
+          'Geçersiz parametreler: ${response.body}',
+          response.statusCode,
+        );
+      } else if (response.statusCode == 404) {
+        throw AllergyClassificationException(
+          'Kullanıcı bulunamadı veya servis bulunamadı.',
+          response.statusCode,
+        );
+      } else if (response.statusCode == 500) {
+        throw AllergyClassificationException(
+          'Sunucu hatası. Lütfen daha sonra tekrar deneyin.',
+          response.statusCode,
+        );
+      } else {
+        throw AllergyClassificationException(
+          'Beklenmeyen hata: ${response.statusCode}',
+          response.statusCode,
+        );
+      }
+    } catch (e) {
+      if (e is AllergyClassificationException) {
+        rethrow;
+      }
+      throw AllergyClassificationException(
+        'Ağ hatası: $e',
+        0,
+      );
     }
   }
 
@@ -186,4 +286,58 @@ class AllergyFormOptions {
     'hospitalization': 'Hastaneye yatış',
     'anaphylaxis': 'Anafilaksi',
   };
+
+  /// Get prediction for user based on location and user ID
+  static Future<Map<String, dynamic>> getPrediction({
+    required double latitude,
+    required double longitude,
+    required String userId,
+  }) async {
+    try {
+      final url = Uri.parse(
+        'http://localhost:8484/api/v1/model/prediction?lat=$latitude&lon=$longitude&userId=$userId'
+      );
+      
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+        return jsonResponse;
+      } else if (response.statusCode == 400) {
+        throw AllergyClassificationException(
+          'Geçersiz parametreler: ${response.body}',
+          response.statusCode,
+        );
+      } else if (response.statusCode == 404) {
+        throw AllergyClassificationException(
+          'Kullanıcı bulunamadı veya servis bulunamadı.',
+          response.statusCode,
+        );
+      } else if (response.statusCode == 500) {
+        throw AllergyClassificationException(
+          'Sunucu hatası. Lütfen daha sonra tekrar deneyin.',
+          response.statusCode,
+        );
+      } else {
+        throw AllergyClassificationException(
+          'Beklenmeyen hata: ${response.statusCode}',
+          response.statusCode,
+        );
+      }
+    } catch (e) {
+      if (e is AllergyClassificationException) {
+        rethrow;
+      }
+      throw AllergyClassificationException(
+        'Ağ hatası: $e',
+        0,
+      );
+    }
+  }
 }

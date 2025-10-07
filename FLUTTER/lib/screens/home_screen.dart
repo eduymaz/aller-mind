@@ -1,11 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:async';
 import '../providers/allermind_provider.dart';
-import '../models/user_settings.dart';
 import 'user_selection_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  
+  @override
+  void initState() {
+    super.initState();
+    // 4 saniye sonra User Selection Screen'e yönlendir
+    Timer(const Duration(seconds: 4), () {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const UserSelectionScreen(),
+          ),
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,37 +130,23 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               
-              // Başla butonu
+              // Loading indicator
               Padding(
                 padding: const EdgeInsets.all(24.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const UserSelectionScreen(),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: const Color(0xFF2E7D32),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 5,
+                child: Column(
+                  children: [
+                    const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
-                    child: const Text(
-                      'Allerji Riskini Kontrol Et',
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Yükleniyor...',
                       style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.white70,
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
               

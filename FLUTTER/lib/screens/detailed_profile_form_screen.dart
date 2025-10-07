@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import '../models/allergy_profile_request.dart';
 import '../services/allergy_classification_service.dart';
+import '../services/user_storage_service.dart';
 import 'allergy_classification_result_screen.dart';
 
 class DetailedProfileFormScreen extends StatefulWidget {
-  const DetailedProfileFormScreen({Key? key}) : super(key: key);
+  final AllergyProfileRequest? existingRequest;
+  final bool isEditing;
+  
+  const DetailedProfileFormScreen({
+    Key? key, 
+    this.existingRequest,
+    this.isEditing = false,
+  }) : super(key: key);
 
   @override
   State<DetailedProfileFormScreen> createState() => _DetailedProfileFormScreenState();
@@ -16,13 +24,16 @@ class _DetailedProfileFormScreenState extends State<DetailedProfileFormScreen> {
   
   // Form controllers and values
   final _ageController = TextEditingController();
-  final _latController = TextEditingController();
-  final _lonController = TextEditingController();
   
   String _selectedGender = '';
   String _selectedClinicalDiagnosis = '';
   bool _familyAllergyHistory = false;
   List<String> _selectedMedications = [];
+  
+  // Location data
+  double? _latitude;
+  double? _longitude;
+
   
   // Environmental triggers
   bool _airPollution = false;
@@ -54,32 +65,82 @@ class _DetailedProfileFormScreenState extends State<DetailedProfileFormScreen> {
   bool _anaphylaxis = false;
   
   bool _isLoading = false;
-  bool _isLoadingLocation = false;
+
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEditing && widget.existingRequest != null) {
+      _populateExistingData();
+    } else {
+      // Automatically get location when form loads
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _getCurrentLocation();
+      });
+    }
+  }
+
+  void _populateExistingData() {
+    final request = widget.existingRequest!;
+    
+    _ageController.text = request.age.toString();
+    _latitude = request.latitude;
+    _longitude = request.longitude;
+
+    
+    _selectedGender = request.gender;
+    _selectedClinicalDiagnosis = request.clinicalDiagnosis;
+    _familyAllergyHistory = request.familyAllergyHistory;
+    _selectedMedications = List.from(request.currentMedications);
+    
+    // Environmental triggers
+    _airPollution = request.environmentalTriggers.airPollution;
+    _dustMites = request.environmentalTriggers.dustMites;
+    _petDander = request.environmentalTriggers.petDander;
+    _smoke = request.environmentalTriggers.smoke;
+    _mold = request.environmentalTriggers.mold;
+    
+    // Food allergies
+    _appleAllergy = request.foodAllergies.apple;
+    _shellfishAllergy = request.foodAllergies.shellfish;
+    _nutsAllergy = request.foodAllergies.nuts;
+    
+    // Tree pollen allergies
+    _pineAllergy = request.treePollenAllergies.pine;
+    _oliveAllergy = request.treePollenAllergies.olive;
+    _birchAllergy = request.treePollenAllergies.birch;
+    
+    // Grass pollen allergies
+    _graminalesAllergy = request.grassPollenAllergies.graminales;
+    
+    // Weed pollen allergies
+    _mugwortAllergy = request.weedPollenAllergies.mugwort;
+    _ragweedAllergy = request.weedPollenAllergies.ragweed;
+    
+    // Previous allergic reactions
+    _severeAsthma = request.previousAllergicReactions.severeAsthma;
+    _hospitalization = request.previousAllergicReactions.hospitalization;
+    _anaphylaxis = request.previousAllergicReactions.anaphylaxis;
+  }
 
   @override
   void dispose() {
     _ageController.dispose();
-    _latController.dispose();
-    _lonController.dispose();
     super.dispose();
   }
 
   Future<void> _getCurrentLocation() async {
-    setState(() {
-      _isLoadingLocation = true;
-    });
-
     try {
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          throw Exception('Konum izni reddedildi');
+          throw Exception('Konum izni reddedildi. Lütfen ayarlardan konum iznini açın.');
         }
       }
 
       if (permission == LocationPermission.deniedForever) {
-        throw Exception('Konum izni kalıcı olarak reddedildi');
+        throw Exception('Konum izni kalıcı olarak reddedildi. Lütfen ayarlardan konum iznini açın.');
       }
 
       Position position = await Geolocator.getCurrentPosition(
@@ -87,36 +148,31 @@ class _DetailedProfileFormScreenState extends State<DetailedProfileFormScreen> {
       );
 
       setState(() {
-        _latController.text = position.latitude.toStringAsFixed(6);
-        _lonController.text = position.longitude.toStringAsFixed(6);
+        _latitude = position.latitude;
+        _longitude = position.longitude;
       });
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Konum başarıyla alındı!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Konum alınamadı: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    } finally {
-      setState(() {
-        _isLoadingLocation = false;
-      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Konum alınamadı: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
-  void _setPresetLocation(String cityName, double lat, double lon) {
-    setState(() {
-      _latController.text = lat.toStringAsFixed(6);
-      _lonController.text = lon.toStringAsFixed(6);
-    });
-    
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('$cityName konumu ayarlandı'),
-        backgroundColor: Colors.green,
-      ),
-    );
-  }
+
 
   Future<void> _submitForm() async {
     if (!_formKey.currentState!.validate()) {
@@ -130,6 +186,11 @@ class _DetailedProfileFormScreenState extends State<DetailedProfileFormScreen> {
 
     if (_selectedClinicalDiagnosis.isEmpty) {
       _showErrorDialog('Lütfen klinik durum seçin');
+      return;
+    }
+
+    if (_latitude == null || _longitude == null) {
+      _showErrorDialog('Konum bilgisi alınamadı. Lütfen konum iznini verin veya tekrar deneyin.');
       return;
     }
 
@@ -159,8 +220,8 @@ class _DetailedProfileFormScreenState extends State<DetailedProfileFormScreen> {
         grassPollenAllergies: GrassPollenAllergies(
           graminales: _graminalesAllergy,
         ),
-        latitude: double.parse(_latController.text),
-        longitude: double.parse(_lonController.text),
+        latitude: _latitude!,
+        longitude: _longitude!,
         previousAllergicReactions: PreviousAllergicReactions(
           severeAsthma: _severeAsthma,
           hospitalization: _hospitalization,
@@ -184,8 +245,28 @@ class _DetailedProfileFormScreenState extends State<DetailedProfileFormScreen> {
 
       final response = await AllergyClassificationService.classifyAllergyProfile(request);
       
+      // Save user data to local storage
+      if (response.userPreferenceId.isNotEmpty) {
+        await UserStorageService.saveUserPreferenceId(response.userPreferenceId);
+        await UserStorageService.saveUserRequest(request);
+        await UserStorageService.saveLastClassification(response);
+      }
+      
       if (mounted) {
-        Navigator.push(
+        if (widget.isEditing) {
+          // Show success message for profile update
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Profil başarıyla kaydedildi!'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+        
+        // Her durumda da stack'i temizleyip sonuç sayfasına git
+        // Böylece sonuç sayfasından geri dönüş her zaman user selection sayfasına olacak
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (context) => AllergyClassificationResultScreen(
@@ -193,6 +274,7 @@ class _DetailedProfileFormScreenState extends State<DetailedProfileFormScreen> {
               request: request,
             ),
           ),
+          (route) => route.settings.name == '/' || route.isFirst,
         );
       }
       
@@ -229,7 +311,7 @@ class _DetailedProfileFormScreenState extends State<DetailedProfileFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detaylı Profil Oluştur'),
+        title: Text(widget.isEditing ? 'Profil Güncelle' : 'Detaylı Profil Oluştur'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: _isLoading
@@ -277,48 +359,56 @@ class _DetailedProfileFormScreenState extends State<DetailedProfileFormScreen> {
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              controller: _ageController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Yaş',
-                border: OutlineInputBorder(),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Lütfen yaşınızı girin';
-                }
-                final age = int.tryParse(value);
-                if (age == null || age <= 0 || age > 150) {
-                  return 'Geçerli bir yaş girin (1-150)';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              value: _selectedGender.isEmpty ? null : _selectedGender,
-              decoration: const InputDecoration(
-                labelText: 'Cinsiyet',
-                border: OutlineInputBorder(),
-              ),
-              items: AllergyFormOptions.genders.map((gender) {
-                return DropdownMenuItem(
-                  value: gender,
-                  child: Text(AllergyFormOptions.genderLabels[gender] ?? gender),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  _selectedGender = value ?? '';
-                });
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Lütfen cinsiyet seçin';
-                }
-                return null;
-              },
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _ageController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      labelText: 'Yaş',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Lütfen yaşınızı girin';
+                      }
+                      final age = int.tryParse(value);
+                      if (age == null || age <= 0 || age > 150) {
+                        return 'Geçerli bir yaş girin (1-150)';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    value: _selectedGender.isEmpty ? null : _selectedGender,
+                    decoration: const InputDecoration(
+                      labelText: 'Cinsiyet',
+                      border: OutlineInputBorder(),
+                    ),
+                    items: AllergyFormOptions.genders.map((gender) {
+                      return DropdownMenuItem(
+                        value: gender,
+                        child: Text(AllergyFormOptions.genderLabels[gender] ?? gender),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedGender = value ?? '';
+                      });
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Lütfen cinsiyet seçin';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -327,102 +417,11 @@ class _DetailedProfileFormScreenState extends State<DetailedProfileFormScreen> {
   }
 
   Widget _buildLocationSection() {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Konum Bilgileri',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _latController,
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    decoration: const InputDecoration(
-                      labelText: 'Enlem (Latitude)',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Enlem gerekli';
-                      }
-                      final lat = double.tryParse(value);
-                      if (lat == null || lat < -90 || lat > 90) {
-                        return 'Geçerli enlem (-90 ile 90 arası)';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: TextFormField(
-                    controller: _lonController,
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    decoration: const InputDecoration(
-                      labelText: 'Boylam (Longitude)',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Boylam gerekli';
-                      }
-                      final lon = double.tryParse(value);
-                      if (lon == null || lon < -180 || lon > 180) {
-                        return 'Geçerli boylam (-180 ile 180 arası)';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton.icon(
-              onPressed: _isLoadingLocation ? null : _getCurrentLocation,
-              icon: _isLoadingLocation
-                  ? const SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Icon(Icons.my_location),
-              label: const Text('Mevcut Konumumu Al'),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Veya şehir seçin:',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8.0,
-              children: [
-                _buildCityButton('İstanbul', 41.0082, 28.9784),
-                _buildCityButton('Ankara', 39.9334, 32.8597),
-                _buildCityButton('İzmir', 38.4192, 27.1287),
-                _buildCityButton('Antalya', 36.8969, 30.7133),
-                _buildCityButton('Trabzon', 41.0039, 39.7168),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
+    // Konum bilgileri kullanıcıya gösterilmiyor, arka planda otomatik alınıyor
+    return const SizedBox.shrink();
   }
 
-  Widget _buildCityButton(String city, double lat, double lon) {
-    return ElevatedButton(
-      onPressed: () => _setPresetLocation(city, lat, lon),
-      child: Text(city),
-    );
-  }
+
 
   Widget _buildClinicalSection() {
     return Card(
@@ -767,9 +766,9 @@ class _DetailedProfileFormScreenState extends State<DetailedProfileFormScreen> {
         ),
         child: _isLoading
             ? const CircularProgressIndicator()
-            : const Text(
-                'Profil Analizi Yap',
-                style: TextStyle(fontSize: 18),
+            : Text(
+                widget.isEditing ? 'Kaydet' : 'Profil Analizi Yap',
+                style: const TextStyle(fontSize: 18),
               ),
       ),
     );
