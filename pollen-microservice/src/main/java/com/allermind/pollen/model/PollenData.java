@@ -45,7 +45,7 @@ public class PollenData {
     @Column(name = "upi_value", nullable = false)
     private Float upiValue;
     
-    @Column(name = "health_recommendations")
+    @Column(name = "health_recommendations", length=100000)
     private String healthRecommendations;
     
     @OneToMany(mappedBy = "pollenData", cascade = CascadeType.ALL, orphanRemoval = true)
