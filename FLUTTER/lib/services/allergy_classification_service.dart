@@ -217,7 +217,7 @@ class AllergyFormOptions {
   static const Map<String, String> genderLabels = {
     'male': 'Erkek',
     'female': 'Kadın', 
-    'other': 'Diğer',
+    'other': 'Belirtmek İstemiyorum',
   };
 
   static const List<String> clinicalDiagnoses = [
@@ -228,10 +228,10 @@ class AllergyFormOptions {
   ];
 
   static const Map<String, String> clinicalDiagnosisLabels = {
-    'none': 'Alerji tanısı yok',
-    'mild_moderate_allergy': 'Hafif-orta alerji',
-    'severe_allergy': 'Şiddetli alerji',
-    'asthma': 'Astım',
+    'none': 'Alerji Tanısı Olmayan',
+    'mild_moderate_allergy': 'Hafif/Orta Derece Alerjik Durum',
+    'severe_allergy': 'Şiddetli Alerjik Durum',
+    'asthma': 'Çocuk/Kronik Rahatsız',
   };
 
   static const List<String> availableMedications = [
@@ -282,9 +282,9 @@ class AllergyFormOptions {
   };
 
   static const Map<String, String> allergicReactionLabels = {
-    'severe_asthma': 'Şiddetli astım',
-    'hospitalization': 'Hastaneye yatış',
-    'anaphylaxis': 'Anafilaksi',
+    'severe_asthma': 'Akut Şiddetli Astım Atak',
+    'hospitalization': 'Hastanede Tedavi/İzlem Gerekliliği',
+    'anaphylaxis': 'Anafilaksi Durumu',
   };
 
   /// Get prediction for user based on location and user ID

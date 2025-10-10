@@ -3,12 +3,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_profile_response.dart';
 import '../models/allergy_profile_request.dart';
 import '../models/allergy_classification_response.dart';
+import '../models/prediction_response.dart';
 
 class UserStorageService {
   static const String _userPreferenceIdKey = 'user_preference_id';
   static const String _userProfileKey = 'user_profile';
   static const String _userRequestKey = 'user_request';
   static const String _lastClassificationKey = 'last_classification';
+  static const String _lastPredictionKey = 'last_prediction';
 
   /// Save user preference ID
   static Future<void> saveUserPreferenceId(String userPreferenceId) async {
@@ -94,6 +96,28 @@ class UserStorageService {
     return userPreferenceId != null && userPreferenceId.isNotEmpty;
   }
 
+  /// Save last prediction response (as Map)
+  static Future<void> saveLastPrediction(Map<String, dynamic> prediction) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_lastPredictionKey, jsonEncode(prediction));
+  }
+
+  /// Get last prediction response
+  static Future<PredictionResponse?> getLastPrediction() async {
+    final prefs = await SharedPreferences.getInstance();
+    final predictionString = prefs.getString(_lastPredictionKey);
+    if (predictionString != null) {
+      try {
+        final predictionMap = jsonDecode(predictionString) as Map<String, dynamic>;
+        return PredictionResponse.fromJson(predictionMap);
+      } catch (e) {
+        // If parsing fails, return null
+        return null;
+      }
+    }
+    return null;
+  }
+
   /// Clear all user data
   static Future<void> clearUserData() async {
     final prefs = await SharedPreferences.getInstance();
@@ -101,6 +125,7 @@ class UserStorageService {
     await prefs.remove(_userProfileKey);
     await prefs.remove(_userRequestKey);
     await prefs.remove(_lastClassificationKey);
+    await prefs.remove(_lastPredictionKey);
   }
 
   /// Save complete user session (profile + request + classification)

@@ -257,14 +257,14 @@ class _DetailedProfileFormScreenState extends State<DetailedProfileFormScreen> {
           // Show success message for profile update
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Profil başarıyla kaydedildi!'),
+              content: Text('Klinik profil başarıyla güncellendi!'),
               backgroundColor: Colors.green,
               duration: Duration(seconds: 2),
             ),
           );
         }
         
-        // Her durumda da stack'i temizleyip sonuç sayfasına git
+        // Her durumda da stack'i temizleyip sonuç sayfası
         // Böylece sonuç sayfasından geri dönüş her zaman user selection sayfasına olacak
         Navigator.pushAndRemoveUntil(
           context,
@@ -311,8 +311,16 @@ class _DetailedProfileFormScreenState extends State<DetailedProfileFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isEditing ? 'Profil Güncelle' : 'Detaylı Profil Oluştur'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(
+          widget.isEditing ? 'Klinik Profil Güncelle' : 'Klinik Profil Oluştur',
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        backgroundColor: Colors.teal,
+        foregroundColor: Colors.white,
+        elevation: 2,
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -417,7 +425,7 @@ class _DetailedProfileFormScreenState extends State<DetailedProfileFormScreen> {
   }
 
   Widget _buildLocationSection() {
-    // Konum bilgileri kullanıcıya gösterilmiyor, arka planda otomatik alınıyor
+    // Konum bilgileri kullanıcıya gösterilmiyor, arka planda otomatik alınıyor -sunumda aktarılmalı 
     return const SizedBox.shrink();
   }
 
@@ -461,7 +469,7 @@ class _DetailedProfileFormScreenState extends State<DetailedProfileFormScreen> {
             ),
             const SizedBox(height: 16),
             SwitchListTile(
-              title: const Text('Ailede alerji geçmişi var'),
+              title: const Text('Ailede Alerji Öyküsü Mevcut'), // standart tıbbi kayıt dili olarak kullanıldı 
               value: _familyAllergyHistory,
               onChanged: (value) {
                 setState(() {
@@ -767,8 +775,11 @@ class _DetailedProfileFormScreenState extends State<DetailedProfileFormScreen> {
         child: _isLoading
             ? const CircularProgressIndicator()
             : Text(
-                widget.isEditing ? 'Kaydet' : 'Profil Analizi Yap',
-                style: const TextStyle(fontSize: 18),
+                widget.isEditing ? 'Klinik Profil Kaydet' : 'Klinik Analiz Başlat',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
       ),
     );

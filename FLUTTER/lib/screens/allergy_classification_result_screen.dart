@@ -48,6 +48,234 @@ class AllergyClassificationResultScreen extends StatelessWidget {
     }
   }
 
+  String _translatePollenName(String pollen) {
+    final translations = {
+      // Trees - Ağaçlar
+      'birch': 'Huş Ağacı',
+      'oak': 'Meşe',
+      'pine': 'Çam',
+      'olive': 'Zeytin',
+      'plane': 'Çınar',
+      'cypress': 'Servi',
+      'hazel': 'Fındık',
+      'alder': 'Kızılağaç',
+      'poplar': 'Kavak',
+      'willow': 'Söğüt',
+      'ash': 'Dişbudak',
+      'maple': 'Akçaağaç',
+      'elm': 'Karaağaç',
+      'beech': 'Kayın',
+      'chestnut': 'Kestane',
+      'linden': 'Ihlamur',
+      'walnut': 'Ceviz',
+      
+      // Grasses - Otlar
+      'grass': 'Çimen',
+      'timothy': 'Timothy Otu',
+      'rye grass': 'Çavdar Otu',
+      'bermuda': 'Bermuda Otu',
+      'johnson grass': 'Johnson Otu',
+      'bahia': 'Bahia Otu',
+      'fescue': 'Yumak Otu',
+      'kentucky bluegrass': 'Kentucky Çimi',
+      'orchard grass': 'Domuz Ayrığı',
+      
+      // Weeds - Yabani Otlar
+      'ragweed': 'Ambrozya',
+      'mugwort': 'Pelin',
+      'plantain': 'Sinir Otu',
+      'nettle': 'Isırgan',
+      'sorrel': 'Kuzukulağı',
+      'goosefoot': 'Sirken',
+      'lamb\'s quarters': 'Kazayağı',
+      'english plantain': 'İngiliz Sinir Otu',
+      'cocklebur': 'Domuz Pıtrağı',
+      'sagebrush': 'Yavşan Otu',
+      'amaranth': 'Horozibiği',
+      'pigweed': 'Domuz Otu',
+      
+      // Fungi/Molds - Küfler
+      'alternaria': 'Alternaria Küfü',
+      'cladosporium': 'Cladosporium Küfü',
+      'aspergillus': 'Aspergillus Küfü',
+      'penicillium': 'Penicillium Küfü',
+      'botrytis': 'Botrytis Küfü',
+      'helminthosporium': 'Helminthosporium Küfü',
+      'epicoccum': 'Epicoccum Küfü',
+      'stemphylium': 'Stemphylium Küfü',
+      'drechslera': 'Drechslera Küfü',
+      'fusarium': 'Fusarium Küfü',
+    };
+    
+    String lowerPollen = pollen.toLowerCase().trim();
+    return translations[lowerPollen] ?? pollen;
+  }
+
+  String _translateFoodName(String food) {
+    final translations = {
+      // Fruits - Meyveler
+      'apple': 'Elma',
+      'pear': 'Armut',
+      'cherry': 'Kiraz',
+      'peach': 'Şeftali',
+      'apricot': 'Kayısı',
+      'plum': 'Erik',
+      'kiwi': 'Kivi',
+      'banana': 'Muz',
+      'melon': 'Kavun',
+      'watermelon': 'Karpuz',
+      'orange': 'Portakal',
+      'lemon': 'Limon',
+      'grapefruit': 'Greyfurt',
+      'strawberry': 'Çilek',
+      'raspberry': 'Ahududu',
+      'blackberry': 'Böğürtlen',
+      'blueberry': 'Yaban Mersini',
+      'grape': 'Üzüm',
+      'pineapple': 'Ananas',
+      'mango': 'Mango',
+      'papaya': 'Papaya',
+      'avocado': 'Avokado',
+      
+      // Vegetables - Sebzeler
+      'tomato': 'Domates',
+      'potato': 'Patates',
+      'carrot': 'Havuç',
+      'celery': 'Kereviz',
+      'onion': 'Soğan',
+      'garlic': 'Sarımsak',
+      'pepper': 'Biber',
+      'cucumber': 'Salatalık',
+      'lettuce': 'Marul',
+      'spinach': 'Ispanak',
+      'cabbage': 'Lahana',
+      'broccoli': 'Brokoli',
+      'cauliflower': 'Karnabahar',
+      'eggplant': 'Patlıcan',
+      'zucchini': 'Kabak',
+      'radish': 'Turp',
+      'beetroot': 'Pancar',
+      'turnip': 'Şalgam',
+      'leek': 'Pırasa',
+      'artichoke': 'Enginar',
+      'asparagus': 'Kuşkonmaz',
+      
+      // Nuts - Kuruyemişler
+      'hazelnut': 'Fındık',
+      'walnut': 'Ceviz',
+      'almond': 'Badem',
+      'peanut': 'Yer Fıstığı',
+      'pistachio': 'Antep Fıstığı',
+      'cashew': 'Kaju',
+      'brazil nut': 'Brezilya Fıstığı',
+      'pecan': 'Pekan Cevizi',
+      'chestnut': 'Kestane',
+      'pine nut': 'Çam Fıstığı',
+      
+      // Herbs and Spices - Baharatlar ve Otlar
+      'parsley': 'Maydanoz',
+      'dill': 'Dereotu',
+      'mint': 'Nane',
+      'basil': 'Fesleğen',
+      'oregano': 'Kekik',
+      'thyme': 'Kekik',
+      'rosemary': 'Biberiye',
+      'sage': 'Adaçayı',
+      'coriander': 'Kişniş',
+      'cumin': 'Kimyon',
+      'fennel': 'Rezene',
+      'anise': 'Anason',
+      'cardamom': 'Kakule',
+      'cinnamon': 'Tarçın',
+      'clove': 'Karanfil',
+      'ginger': 'Zencefil',
+      'turmeric': 'Zerdeçal',
+      'paprika': 'Kırmızı Biber',
+      'black pepper': 'Karabiber',
+      'white pepper': 'Beyaz Biber',
+      'herbs': 'Baharatlar',
+      'spices': 'Otlar',
+      
+      // Grains and Legumes - Tahıllar ve Baklagiller
+      'wheat': 'Buğday',
+      'rice': 'Pirinç',
+      'oat': 'Yulaf',
+      'barley': 'Arpa',
+      'rye': 'Çavdar',
+      'corn': 'Mısır',
+      'soy': 'Soya',
+      'lentil': 'Mercimek',
+      'chickpea': 'Nohut',
+      'bean': 'Fasulye',
+      'pea': 'Bezelye',
+      'graminales': 'Buğdaylar',
+      
+      // Seeds - Tohumlar
+      'sunflower seed': 'Ayçiçeği Tohumu',
+      'pumpkin seed': 'Kabak Çekirdeği',
+      'sesame': 'Susam',
+      'flax seed': 'Keten Tohumu',
+      'chia seed': 'Chia Tohumu',
+      'poppy seed': 'Haşhaş Tohumu',
+    };
+    
+    String lowerFood = food.toLowerCase().trim();
+    return translations[lowerFood] ?? food;
+  }
+
+  String _translateRecommendationValue(String value) {
+    final translations = {
+      // Environmental Control Levels
+      'minimal': 'Minimum',
+      'moderate': 'Orta',
+      'intensive': 'Yoğun',
+      'maximum': 'Maksimum',
+      'standard': 'Standart',
+      'enhanced': 'Gelişmiş',
+      'strict': 'Sıkı',
+      'basic': 'Temel',
+      
+      // Medication Priority
+      'low': 'Düşük',
+      'medium': 'Orta',
+      'high': 'Yüksek',
+      'urgent': 'Acil',
+      'routine': 'Rutin',
+      'as_needed': 'Gerektiğinde',
+      'prophylactic': 'Önleyici',
+      'rescue': 'Kurtarma',
+      'maintenance': 'Sürdürüm',
+      
+      // Monitoring Frequency
+      'weekly': 'Haftalık',
+      'monthly': 'Aylık',
+      'quarterly': 'Üç Aylık',
+      'biannual': 'Altı Aylık',
+      'annual': 'Yıllık',
+      'seasonal': 'Mevsimsel',
+      'daily': 'Günlük',
+      'continuous': 'Sürekli',
+      
+      // Priority Levels
+      'critical': 'Kritik',
+      'essential': 'Gerekli',
+      'important': 'Önemli',
+      'optional': 'İsteğe Bağlı',
+      'recommended': 'Önerilen',
+      'required': 'Gerekli',
+      
+      // Control Types
+      'environmental': 'Çevresel',
+      'behavioral': 'Davranışsal',
+      'medical': 'Tıbbi',
+      'dietary': 'Diyet',
+      'lifestyle': 'Yaşam Tarzı',
+    };
+    
+    String lowerValue = value.toLowerCase().trim();
+    return translations[lowerValue] ?? value.toUpperCase();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -447,7 +675,7 @@ class AllergyClassificationResultScreen extends StatelessWidget {
                 border: Border.all(color: color.withOpacity(0.3)),
               ),
               child: Text(
-                item,
+                title == 'Çapraz Reaktif Besinler' ? _translateFoodName(item) : _translatePollenName(item),
                 style: TextStyle(
                   fontSize: 12,
                   color: color,
@@ -711,7 +939,7 @@ class AllergyClassificationResultScreen extends StatelessWidget {
               border: Border.all(color: Colors.teal.shade200),
             ),
             child: Text(
-              value.toUpperCase(),
+              _translateRecommendationValue(value),
               style: TextStyle(
                 color: Colors.teal.shade700,
                 fontWeight: FontWeight.bold,

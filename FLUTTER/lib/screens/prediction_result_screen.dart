@@ -541,7 +541,7 @@ class PredictionResultScreen extends StatelessWidget {
                     children: [
                       Icon(Icons.warning, size: 16, color: Colors.red),
                       const SizedBox(width: 8),
-                      Text(pollen.toString()),
+                      Text(_translatePollenName(pollen.toString())),
                     ],
                   ),
                 ),
@@ -567,7 +567,7 @@ class PredictionResultScreen extends StatelessWidget {
                     children: [
                       Icon(Icons.info, size: 16, color: Colors.orange),
                       const SizedBox(width: 8),
-                      Text(pollen.toString()),
+                      Text(_translatePollenName(pollen.toString())),
                     ],
                   ),
                 ),
@@ -604,7 +604,7 @@ class PredictionResultScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        food.toString(),
+                        _translateFoodName(food.toString()),
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.blue.shade800,
@@ -619,6 +619,190 @@ class PredictionResultScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _translateRiskLevel(String risk) {
+    final translations = {
+      'high': 'Yüksek',
+      'medium': 'Orta',
+      'moderate': 'Orta',
+      'low': 'Düşük',
+    };
+    return translations[risk.toLowerCase()] ?? risk.toUpperCase();
+  }
+
+  String _translatePollenName(String pollen) {
+    final translations = {
+      // Trees - Ağaçlar
+      'birch': 'Huş Ağacı',
+      'oak': 'Meşe',
+      'pine': 'Çam',
+      'olive': 'Zeytin',
+      'plane': 'Çınar',
+      'cypress': 'Servi',
+      'hazel': 'Fındık',
+      'alder': 'Kızılağaç',
+      'poplar': 'Kavak',
+      'willow': 'Söğüt',
+      'ash': 'Dişbudak',
+      'maple': 'Akçaağaç',
+      'elm': 'Karaağaç',
+      'beech': 'Kayın',
+      'chestnut': 'Kestane',
+      'linden': 'Ihlamur',
+      'walnut': 'Ceviz',
+      
+      // Grasses - Otlar
+      'grass': 'Çimen',
+      'timothy': 'Timothy Otu',
+      'rye grass': 'Çavdar Otu',
+      'bermuda': 'Bermuda Otu',
+      'johnson grass': 'Johnson Otu',
+      'bahia': 'Bahia Otu',
+      'fescue': 'Yumak Otu',
+      'kentucky bluegrass': 'Kentucky Çimi',
+      'orchard grass': 'Domuz Ayrığı',
+      
+      // Weeds - Yabani Otlar
+      'ragweed': 'Ambrozya',
+      'mugwort': 'Pelin',
+      'plantain': 'Sinir Otu',
+      'nettle': 'Isırgan',
+      'sorrel': 'Kuzukulağı',
+      'goosefoot': 'Sirken',
+      'lamb\'s quarters': 'Kazayağı',
+      'english plantain': 'İngiliz Sinir Otu',
+      'cocklebur': 'Domuz Pıtrağı',
+      'sagebrush': 'Yavşan Otu',
+      'amaranth': 'Horozibiği',
+      'pigweed': 'Domuz Otu',
+      
+      // Fungi/Molds - Küfler
+      'alternaria': 'Alternaria Küfü',
+      'cladosporium': 'Cladosporium Küfü',
+      'aspergillus': 'Aspergillus Küfü',
+      'penicillium': 'Penicillium Küfü',
+      'botrytis': 'Botrytis Küfü',
+      'helminthosporium': 'Helminthosporium Küfü',
+      'epicoccum': 'Epicoccum Küfü',
+      'stemphylium': 'Stemphylium Küfü',
+      'drechslera': 'Drechslera Küfü',
+      'fusarium': 'Fusarium Küfü',
+    };
+    
+    // Küçük harfe çevir ve tercüme et
+    String lowerPollen = pollen.toLowerCase().trim();
+    return translations[lowerPollen] ?? pollen;
+  }
+
+  String _translateFoodName(String food) {
+    final translations = {
+      // Fruits - Meyveler
+      'apple': 'Elma',
+      'pear': 'Armut',
+      'cherry': 'Kiraz',
+      'peach': 'Şeftali',
+      'apricot': 'Kayısı',
+      'plum': 'Erik',
+      'kiwi': 'Kivi',
+      'banana': 'Muz',
+      'melon': 'Kavun',
+      'watermelon': 'Karpuz',
+      'orange': 'Portakal',
+      'lemon': 'Limon',
+      'grapefruit': 'Greyfurt',
+      'strawberry': 'Çilek',
+      'raspberry': 'Ahududu',
+      'blackberry': 'Böğürtlen',
+      'blueberry': 'Yaban Mersini',
+      'grape': 'Üzüm',
+      'pineapple': 'Ananas',
+      'mango': 'Mango',
+      'papaya': 'Papaya',
+      'avocado': 'Avokado',
+      
+      // Vegetables - Sebzeler
+      'tomato': 'Domates',
+      'potato': 'Patates',
+      'carrot': 'Havuç',
+      'celery': 'Kereviz',
+      'onion': 'Soğan',
+      'garlic': 'Sarımsak',
+      'pepper': 'Biber',
+      'cucumber': 'Salatalık',
+      'lettuce': 'Marul',
+      'spinach': 'Ispanak',
+      'cabbage': 'Lahana',
+      'broccoli': 'Brokoli',
+      'cauliflower': 'Karnabahar',
+      'eggplant': 'Patlıcan',
+      'zucchini': 'Kabak',
+      'radish': 'Turp',
+      'beetroot': 'Pancar',
+      'turnip': 'Şalgam',
+      'leek': 'Pırasa',
+      'artichoke': 'Enginar',
+      'asparagus': 'Kuşkonmaz',
+      
+      // Nuts - Kuruyemişler
+      'hazelnut': 'Fındık',
+      'walnut': 'Ceviz',
+      'almond': 'Badem',
+      'peanut': 'Yer Fıstığı',
+      'pistachio': 'Antep Fıstığı',
+      'cashew': 'Kaju',
+      'brazil nut': 'Brezilya Fıstığı',
+      'pecan': 'Pekan Cevizi',
+      'chestnut': 'Kestane',
+      'pine nut': 'Çam Fıstığı',
+      
+      // Herbs and Spices - Baharatlar ve Otlar
+      'parsley': 'Maydanoz',
+      'dill': 'Dereotu',
+      'mint': 'Nane',
+      'basil': 'Fesleğen',
+      'oregano': 'Kekik',
+      'thyme': 'Kekik',
+      'rosemary': 'Biberiye',
+      'sage': 'Adaçayı',
+      'coriander': 'Kişniş',
+      'cumin': 'Kimyon',
+      'fennel': 'Rezene',
+      'anise': 'Anason',
+      'cardamom': 'Kakule',
+      'cinnamon': 'Tarçın',
+      'clove': 'Karanfil',
+      'ginger': 'Zencefil',
+      'turmeric': 'Zerdeçal',
+      'paprika': 'Kırmızı Biber',
+      'black pepper': 'Karabiber',
+      'white pepper': 'Beyaz Biber',
+      
+      // Grains and Legumes - Tahıllar ve Baklagiller
+      'wheat': 'Buğday',
+      'rice': 'Pirinç',
+      'oat': 'Yulaf',
+      'barley': 'Arpa',
+      'rye': 'Çavdar',
+      'corn': 'Mısır',
+      'soy': 'Soya',
+      'lentil': 'Mercimek',
+      'chickpea': 'Nohut',
+      'bean': 'Fasulye',
+      'pea': 'Bezelye',
+      'graminales': 'Buğdaylar',
+      
+      // Seeds - Tohumlar
+      'sunflower seed': 'Ayçiçeği Tohumu',
+      'pumpkin seed': 'Kabak Çekirdeği',
+      'sesame': 'Susam',
+      'flax seed': 'Keten Tohumu',
+      'chia seed': 'Chia Tohumu',
+      'poppy seed': 'Haşhaş Tohumu',
+    };
+    
+    String lowerFood = food.toLowerCase().trim();
+    return translations[lowerFood] ?? food;
   }
 
   Widget _buildRiskItem(String title, String risk) {
@@ -656,7 +840,7 @@ class PredictionResultScreen extends StatelessWidget {
         ),
         Expanded(
           child: Text(
-            risk.toUpperCase(),
+            _translateRiskLevel(risk),
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
