@@ -56,3 +56,6 @@ logs/
 *.tmp
 *.temp
 *.bak
+
+# Large model file (will be downloaded from Google Drive during build)
+DATA/MODEL/version2_pkl_models/Grup1_advanced_model_v2.pkl
