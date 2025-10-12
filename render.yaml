@@ -141,6 +141,5 @@ databases:
   # PostgreSQL Database (Managed Database)
   - name: allermind-db
     databaseName: allermind
-    plan: starter
     region: frankfurt
     ipAllowList: []
