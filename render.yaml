@@ -25,7 +25,6 @@ services:
           envVarKey: POSTGRES_PASSWORD
       - key: JAVA_OPTS
         value: -Xmx512m -Xms256m
-    healthCheckPath: /actuator/health
     disk:
       name: userpreference-data
       mountPath: /app/data
@@ -56,7 +55,6 @@ services:
           envVarKey: POSTGRES_PASSWORD
       - key: JAVA_OPTS
         value: -Xmx512m -Xms256m
-    healthCheckPath: /actuator/health
 
   # Pollen Microservice
   - type: pserv
@@ -85,7 +83,6 @@ services:
         sync: false
       - key: JAVA_OPTS
         value: -Xmx512m -Xms256m
-    healthCheckPath: /actuator/health
 
   # ML Model Microservice (Python)
   - type: pserv
@@ -102,7 +99,6 @@ services:
         value: 1
       - key: PYTHON_ENV
         value: production
-    healthCheckPath: /health
 
   # Model Microservice (Orchestrator)
   - type: pserv
@@ -125,7 +121,6 @@ services:
         value: http://allermind-userpreference:10000
       - key: JAVA_OPTS
         value: -Xmx512m -Xms256m
-    healthCheckPath: /actuator/health
 
   # Flutter Web Application
   - type: web
@@ -143,10 +138,9 @@ services:
     healthCheckPath: /
 
 databases:
-  # PostgreSQL Database (Alternatif - Managed Database)
+  # PostgreSQL Database (Managed Database)
   - name: allermind-db
     databaseName: allermind
-    user: postgres
     plan: starter
     region: frankfurt
     ipAllowList: []
