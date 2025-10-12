@@ -15,14 +15,6 @@ services:
         fromDatabase:
           name: allermind-db
           property: connectionString
-      - key: SPRING_DATASOURCE_USERNAME
-        fromDatabase:
-          name: allermind-db
-          property: user
-      - key: SPRING_DATASOURCE_PASSWORD
-        fromDatabase:
-          name: allermind-db
-          property: password
       - key: JAVA_OPTS
         value: -Xmx512m -Xms256m
     disk:
@@ -45,14 +37,6 @@ services:
         fromDatabase:
           name: allermind-db
           property: connectionString
-      - key: SPRING_DATASOURCE_USERNAME
-        fromDatabase:
-          name: allermind-db
-          property: user
-      - key: SPRING_DATASOURCE_PASSWORD
-        fromDatabase:
-          name: allermind-db
-          property: password
       - key: JAVA_OPTS
         value: -Xmx512m -Xms256m
 
@@ -71,14 +55,6 @@ services:
         fromDatabase:
           name: allermind-db
           property: connectionString
-      - key: SPRING_DATASOURCE_USERNAME
-        fromDatabase:
-          name: allermind-db
-          property: user
-      - key: SPRING_DATASOURCE_PASSWORD
-        fromDatabase:
-          name: allermind-db
-          property: password
       - key: GOOGLE_POLLEN_API_KEY
         sync: false
       - key: JAVA_OPTS
