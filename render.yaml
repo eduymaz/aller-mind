@@ -11,10 +11,18 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: docker
-      - key: SPRING_DATASOURCE_URL
+      - key: DB_HOST
         fromDatabase:
           name: allermind-db
-          property: connectionString
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: allermind-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: allermind-db
+          property: databaseName
       - key: SPRING_DATASOURCE_USERNAME
         fromDatabase:
           name: allermind-db
@@ -41,10 +49,18 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: docker
-      - key: SPRING_DATASOURCE_URL
+      - key: DB_HOST
         fromDatabase:
           name: allermind-db
-          property: connectionString
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: allermind-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: allermind-db
+          property: databaseName
       - key: SPRING_DATASOURCE_USERNAME
         fromDatabase:
           name: allermind-db
@@ -67,10 +83,18 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: docker
-      - key: SPRING_DATASOURCE_URL
+      - key: DB_HOST
         fromDatabase:
           name: allermind-db
-          property: connectionString
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: allermind-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: allermind-db
+          property: databaseName
       - key: SPRING_DATASOURCE_USERNAME
         fromDatabase:
           name: allermind-db
