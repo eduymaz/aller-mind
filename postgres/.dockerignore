@@ -1,0 +1,5 @@
+# PostgreSQL Docker Build Context
+README.md
+.git
+.gitignore
+*.md
