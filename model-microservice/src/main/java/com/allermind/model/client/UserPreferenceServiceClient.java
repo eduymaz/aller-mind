@@ -18,7 +18,7 @@ public class UserPreferenceServiceClient {
     
     private final RestTemplate restTemplate;
     
-    @Value("${userpreference.service.url:http://localhost:9191}")
+    @Value("${user.preference.service.base-url:http://localhost:9191}")
     private String userPreferenceServiceUrl;
     
     public AllergyClassificationResponse getUserPreference(UUID userId) {
