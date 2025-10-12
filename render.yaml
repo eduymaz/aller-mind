@@ -33,10 +33,6 @@ services:
           property: password
       - key: JAVA_OPTS
         value: -Xmx512m -Xms256m
-    disk:
-      name: userpreference-data
-      mountPath: /app/data
-      sizeGB: 1
 
   # Weather Air Pollution Microservice
   - type: pserv
