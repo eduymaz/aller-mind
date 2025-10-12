@@ -1,30 +1,33 @@
-FROM openjdk:21-jdk-slim
+# Stage 1: Build with Maven
+FROM maven:3.9-eclipse-temurin-21 AS builder
+
+WORKDIR /build
+
+# Copy pom.xml and download dependencies (for better caching)
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Copy source code and build
+COPY src ./src
+RUN mvn clean package -DskipTests -B
+
+# Stage 2: Runtime
+FROM eclipse-temurin:21-jre-jammy
 
 LABEL maintainer="AllerMind Team"
 LABEL description="AllerMind Model Microservice"
 
 WORKDIR /app
 
-# Install curl for health check
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
-
-# Copy the jar file
-COPY target/*.jar app.jar
+# Copy the built jar from builder stage
+COPY --from=builder /build/target/*.jar app.jar
 
 # Expose the port
 EXPOSE 8484
 
-# Environment variables
+# Environment variables (service URL'leri Render'da tanımlanacak)
 ENV JAVA_OPTS="-Xmx512m -Xms256m"
 ENV SPRING_PROFILES_ACTIVE="docker"
-ENV POLLEN_SERVICE_BASE_URL="http://pollen-service:8282"
-ENV WEATHER_SERVICE_BASE_URL="http://weather-service:8383"
-ENV ML_MODEL_SERVICE_BASE_URL="http://ml-model-service:8000"
-ENV USER_PREFERENCE_SERVICE_BASE_URL="http://userpreference-service:9191"
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:8484/actuator/health || exit 1
 
 # Run the application
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]
