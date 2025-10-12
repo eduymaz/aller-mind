@@ -160,6 +160,7 @@ services:
 databases:
   # PostgreSQL Database (Managed Database)
   - name: allermind-db
+    plan: free # Ücretsiz katman için kritik
     databaseName: allermind
     region: frankfurt
     ipAllowList: []
