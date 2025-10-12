@@ -1,0 +1,154 @@
+{
+  "version": "2.0",
+  "created_at": "2025-10-07T15:38:18.865699",
+  "models": {
+    "1": "/Users/elifdy/Desktop/allermind/aller-mind/DATA/MODEL/version2_pkl_models/Grup1_advanced_model_v2.pkl",
+    "2": "/Users/elifdy/Desktop/allermind/aller-mind/DATA/MODEL/version2_pkl_models/Grup2_advanced_model_v2.pkl",
+    "3": "/Users/elifdy/Desktop/allermind/aller-mind/DATA/MODEL/version2_pkl_models/Grup3_advanced_model_v2.pkl",
+    "4": "/Users/elifdy/Desktop/allermind/aller-mind/DATA/MODEL/version2_pkl_models/Grup4_advanced_model_v2.pkl",
+    "5": "/Users/elifdy/Desktop/allermind/aller-mind/DATA/MODEL/version2_pkl_models/Grup5_advanced_model_v2.pkl"
+  },
+  "groups": {
+    "1": {
+      "name": "Polen Hassasiyeti Grubu",
+      "description": "A\u011fa\u00e7, \u00e7imen ve yabani ot poleni hassasiyeti",
+      "primary_features": [
+        "pollen_code",
+        "plant_code",
+        "upi_value",
+        "plant_upi_value",
+        "wind_speed_10m",
+        "wind_direction_10m",
+        "relative_humidity_2m"
+      ],
+      "target_weight_factors": {
+        "upi_value": 0.4,
+        "plant_upi_value": 0.3,
+        "wind_speed_10m": 0.15,
+        "relative_humidity_2m": 0.1,
+        "temperature_2m": 0.05
+      },
+      "algorithm": "RandomForest",
+      "algorithm_params": {
+        "n_estimators": 200,
+        "max_depth": 15,
+        "min_samples_split": 5
+      }
+    },
+    "2": {
+      "name": "Hava Kirlili\u011fi Hassasiyeti Grubu",
+      "description": "PM, NO2, Ozon hassasiyeti",
+      "primary_features": [
+        "pm10",
+        "pm2_5",
+        "nitrogen_dioxide",
+        "ozone",
+        "carbon_monoxide",
+        "sulphur_dioxide",
+        "aerosol_optical_depth"
+      ],
+      "target_weight_factors": {
+        "pm10": 0.25,
+        "pm2_5": 0.25,
+        "nitrogen_dioxide": 0.2,
+        "ozone": 0.15,
+        "carbon_monoxide": 0.1,
+        "sulphur_dioxide": 0.05
+      },
+      "algorithm": "GradientBoosting",
+      "algorithm_params": {
+        "n_estimators": 150,
+        "learning_rate": 0.05,
+        "max_depth": 8
+      }
+    },
+    "3": {
+      "name": "UV ve G\u00fcne\u015f Hassasiyeti Grubu",
+      "description": "UV indeksi ve g\u00fcne\u015f \u0131\u015f\u0131\u011f\u0131 hassasiyeti",
+      "primary_features": [
+        "uv_index",
+        "uv_index_clear_sky",
+        "sunshine_duration",
+        "cloud_cover",
+        "temperature_2m"
+      ],
+      "target_weight_factors": {
+        "uv_index": 0.4,
+        "uv_index_clear_sky": 0.25,
+        "sunshine_duration": 0.2,
+        "cloud_cover": 0.1,
+        "temperature_2m": 0.05
+      },
+      "algorithm": "SVR",
+      "algorithm_params": {
+        "C": 100,
+        "gamma": "scale",
+        "kernel": "rbf"
+      }
+    },
+    "4": {
+      "name": "Meteorolojik Hassasiyet Grubu",
+      "description": "Bas\u0131n\u00e7, nem, r\u00fczgar de\u011fi\u015fimleri hassasiyeti",
+      "primary_features": [
+        "surface_pressure",
+        "relative_humidity_2m",
+        "wind_speed_10m",
+        "precipitation",
+        "rain",
+        "cloud_cover"
+      ],
+      "target_weight_factors": {
+        "surface_pressure": 0.3,
+        "relative_humidity_2m": 0.25,
+        "wind_speed_10m": 0.2,
+        "precipitation": 0.15,
+        "cloud_cover": 0.1
+      },
+      "algorithm": "ExtraTrees",
+      "algorithm_params": {
+        "n_estimators": 180,
+        "max_depth": 12,
+        "min_samples_split": 4
+      }
+    },
+    "5": {
+      "name": "Hassas Grup (\u00c7ocuk/Ya\u015fl\u0131)",
+      "description": "T\u00fcm \u00e7evresel fakt\u00f6rlere y\u00fcksek hassasiyet",
+      "primary_features": [
+        "pm10",
+        "pm2_5",
+        "uv_index",
+        "temperature_2m",
+        "ozone",
+        "upi_value",
+        "relative_humidity_2m",
+        "wind_speed_10m"
+      ],
+      "target_weight_factors": {
+        "pm10": 0.2,
+        "pm2_5": 0.2,
+        "uv_index": 0.15,
+        "temperature_2m": 0.15,
+        "ozone": 0.1,
+        "upi_value": 0.1,
+        "relative_humidity_2m": 0.05,
+        "wind_speed_10m": 0.05
+      },
+      "algorithm": "NeuralNetwork",
+      "algorithm_params": {
+        "hidden_layer_sizes": [
+          100,
+          50,
+          25
+        ],
+        "max_iter": 500,
+        "alpha": 0.001
+      }
+    }
+  },
+  "data_info": {
+    "total_samples": 598296,
+    "feature_count": 41,
+    "date_range": "2025-08-30 00:00:00 - 2025-09-11 23:00:00"
+  }
+}
