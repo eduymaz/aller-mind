@@ -152,9 +152,9 @@ services:
     dockerContext: ./FLUTTER
     envVars:
       - key: MODEL_SERVICE_URL
-        value: http://allermind-model:10000
+        value: https://allermind-model.onrender.com
       - key: USER_PREFERENCE_SERVICE_URL
-        value: http://allermind-userpreference:10000
+        value: https://allermind-userpreference.onrender.com
     healthCheckPath: /
 
 databases:
