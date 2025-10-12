@@ -5,7 +5,8 @@ import '../models/allergy_classification_response.dart';
 import '../models/user_profile_response.dart';
 
 class AllergyClassificationService {
-  static const String _baseUrl = 'http://localhost:9191';
+  // Use relative URL - nginx will proxy to userpreference-service
+  static const String _baseUrl = '';
   static const String _classificationEndpoint = '/api/v1/allergy-classification/classify';
 
   /// Classify user's allergy profile and get group assignment
@@ -127,7 +128,7 @@ class AllergyClassificationService {
   }) async {
     try {
       final url = Uri.parse(
-        'http://localhost:8484/api/v1/model/prediction?lat=$latitude&lon=$longitude&userId=$userId'
+        '/api/v1/model/prediction?lat=$latitude&lon=$longitude&userId=$userId'
       );
       
       final response = await http.get(
@@ -295,7 +296,7 @@ class AllergyFormOptions {
   }) async {
     try {
       final url = Uri.parse(
-        'http://localhost:8484/api/v1/model/prediction?lat=$latitude&lon=$longitude&userId=$userId'
+        '/api/v1/model/prediction?lat=$latitude&lon=$longitude&userId=$userId'
       );
       
       final response = await http.get(

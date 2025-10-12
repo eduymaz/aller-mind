@@ -4,7 +4,8 @@ import '../models/allermind_response.dart';
 import '../models/user_settings.dart';
 
 class AllerMindApiService {
-  static const String baseUrl = 'http://localhost:8484';
+  // Use relative URL - nginx will proxy to model-service
+  static const String baseUrl = '';
   static const String predictionEndpoint = '/api/v1/model/prediction';
 
   /// AllerMind model prediction'ı çağırır
