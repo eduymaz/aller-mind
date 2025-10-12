@@ -12,17 +12,17 @@ services:
       - key: SPRING_PROFILES_ACTIVE
         value: docker
       - key: SPRING_DATASOURCE_URL
-        fromService:
-          name: allermind-postgres
-          type: pserv
+        fromDatabase:
+          name: allermind-db
           property: connectionString
       - key: SPRING_DATASOURCE_USERNAME
-        value: postgres
+        fromDatabase:
+          name: allermind-db
+          property: user
       - key: SPRING_DATASOURCE_PASSWORD
-        fromService:
-          name: allermind-postgres
-          type: pserv
-          envVarKey: POSTGRES_PASSWORD
+        fromDatabase:
+          name: allermind-db
+          property: password
       - key: JAVA_OPTS
         value: -Xmx512m -Xms256m
     disk:
@@ -42,17 +42,17 @@ services:
       - key: SPRING_PROFILES_ACTIVE
         value: docker
       - key: SPRING_DATASOURCE_URL
-        fromService:
-          name: allermind-postgres
-          type: pserv
+        fromDatabase:
+          name: allermind-db
           property: connectionString
       - key: SPRING_DATASOURCE_USERNAME
-        value: postgres
+        fromDatabase:
+          name: allermind-db
+          property: user
       - key: SPRING_DATASOURCE_PASSWORD
-        fromService:
-          name: allermind-postgres
-          type: pserv
-          envVarKey: POSTGRES_PASSWORD
+        fromDatabase:
+          name: allermind-db
+          property: password
       - key: JAVA_OPTS
         value: -Xmx512m -Xms256m
 
@@ -68,17 +68,17 @@ services:
       - key: SPRING_PROFILES_ACTIVE
         value: docker
       - key: SPRING_DATASOURCE_URL
-        fromService:
-          name: allermind-postgres
-          type: pserv
+        fromDatabase:
+          name: allermind-db
           property: connectionString
       - key: SPRING_DATASOURCE_USERNAME
-        value: postgres
+        fromDatabase:
+          name: allermind-db
+          property: user
       - key: SPRING_DATASOURCE_PASSWORD
-        fromService:
-          name: allermind-postgres
-          type: pserv
-          envVarKey: POSTGRES_PASSWORD
+        fromDatabase:
+          name: allermind-db
+          property: password
       - key: GOOGLE_POLLEN_API_KEY
         sync: false
       - key: JAVA_OPTS
