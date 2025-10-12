@@ -1,0 +1,199 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    container_name: allermind-postgres
+    environment:
+      POSTGRES_DB: allermind
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5433:5432"
+    volumes:
+      # Kalıcı veri depolama için named volume (veritabanı her yeniden başlatıldığında korunur)
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - allermind-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d allermind"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  # User Preference Microservice
+  userpreference-service:
+    build:
+      context: ./userpreference-microservice
+      dockerfile: Dockerfile
+    container_name: allermind-userpreference
+    ports:
+      - "9191:9191"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/allermind?currentSchema=USER
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=123456
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    volumes:
+      - userpreference_data:/app/data
+    networks:
+      - allermind-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9191/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Weather Air Pollution Microservice
+  weather-service:
+    build:
+      context: ./weather-airpollution-microservice
+      dockerfile: Dockerfile
+    container_name: allermind-weather
+    ports:
+      - "8383:8383"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/allermind?currentSchema=WEATHER
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=123456
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    networks:
+      - allermind-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8383/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Pollen Microservice
+  pollen-service:
+    build:
+      context: ./pollen-microservice
+      dockerfile: Dockerfile
+    container_name: allermind-pollen
+    ports:
+      - "8282:8282"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/allermind?currentSchema=POLLEN
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=123456
+      - GOOGLE_POLLEN_API_KEY=AIzaSyBBu4qaSpo8kTpJlRYZNKjZIqo-JLdMmIc
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    networks:
+      - allermind-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8282/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Model Microservice
+  model-service:
+    build:
+      context: ./model-microservice
+      dockerfile: Dockerfile
+    container_name: allermind-model
+    ports:
+      - "8484:8484"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - POLLEN_SERVICE_BASE_URL=http://pollen-service:8282
+      - WEATHER_SERVICE_BASE_URL=http://weather-service:8383
+      - ML_MODEL_SERVICE_BASE_URL=http://ml-model-service:8585
+      - USER_PREFERENCE_SERVICE_BASE_URL=http://userpreference-service:9191
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    networks:
+      - allermind-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8484/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    depends_on:
+      userpreference-service:
+        condition: service_healthy
+      weather-service:
+        condition: service_healthy
+      pollen-service:
+        condition: service_healthy
+      ml-model-service:
+        condition: service_healthy
+
+  # ML Model Microservice (Python Expert Predictor)
+  ml-model-service:
+    build:
+      context: ./ml-model-microservice
+      dockerfile: Dockerfile
+    container_name: allermind-ml-model
+    ports:
+      - "8585:8585"
+    environment:
+      - FLASK_APP=real_model_test.py
+      - PYTHONUNBUFFERED=1
+      - PYTHON_ENV=production
+    networks:
+      - allermind-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8585/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s
+    restart: unless-stopped
+
+  # Flutter Web Application
+  flutter-web:
+    build:
+      context: ./FLUTTER
+      dockerfile: Dockerfile
+    container_name: allermind-flutter-web
+    ports:
+      - "3000:80"
+    networks:
+      - allermind-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:80 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    depends_on:
+      model-service:
+        condition: service_healthy
+      userpreference-service:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  userpreference_data:
+    driver: local
+
+networks:
+  allermind-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
