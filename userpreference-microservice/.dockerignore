@@ -1,0 +1,28 @@
+# Maven
+target/
+!target/*.jar
+.mvn/
+mvnw
+mvnw.cmd
+
+# IDE
+.vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
