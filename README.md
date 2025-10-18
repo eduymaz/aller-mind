@@ -1207,8 +1207,8 @@ We welcome contributions! Please follow these guidelines:
 ### Project Lead & Core Development
 
 **Elif Duymaz Yılmaz**  
-[![GitHub](https://img.shields.io/badge/GitHub-eduymaz-181717?style=flat-square&logo=github)](https://github.com/eduymaz)  
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-0077B5?style=flat-square&logo=linkedin)](https://linkedin.com/in/eduymaz)
+[![GitHub](https://img.shields.io/badge/GitHub-eduymaz-181717?style=flat-square&logo=github)](https://github.com/eduymaz)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-0077B5?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/elif-duymaz/)
 
 **Roles**:
 - 🔧 Backend Development (Spring Boot Microservices)
