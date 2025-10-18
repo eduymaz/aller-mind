@@ -969,6 +969,9 @@ if __name__ == "__main__":
     print("     🧬 ALLERMIND RISK PREDICTION REST API 🏥")
     print("🌟" + "="*60 + "🌟")
     
+    # Get port from environment variable (Cloud Run compatible)
+    port = int(os.environ.get('PORT', 8585))
+    
     try:
         # Initialize the prediction service
         print("📥 Prediction service başlatılıyor...")
@@ -983,10 +986,11 @@ if __name__ == "__main__":
             print("   POST /predict                    - Legacy prediction endpoint")
             print("   GET  /test                       - Simple test endpoint")
             print("-" * 70)
-            print("🚀 Server http://localhost:8585 adresinde çalışıyor...")
+            print(f"🚀 Server http://0.0.0.0:{port} adresinde çalışıyor...")
+            print(f"📍 PORT: {port} (Environment: {os.environ.get('PORT', 'default')})")
             print("📖 API documentation: README.md dosyasına bakınız")
             
-            app.run(host='0.0.0.0', port=8585, debug=False, threaded=True)
+            app.run(host='0.0.0.0', port=port, debug=False, threaded=True)
         else:
             print("❌ Sistem başlatılamadı")
             sys.exit(1)
