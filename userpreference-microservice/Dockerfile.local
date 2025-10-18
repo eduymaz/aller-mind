@@ -22,9 +22,17 @@ WORKDIR /app
 # Copy the built jar from builder stage
 COPY --from=builder /build/target/*.jar app.jar
 
+# Expose the port
+EXPOSE 9191
+
 # Environment variables
 ENV JAVA_OPTS="-Xmx512m -Xms256m"
-ENV SPRING_PROFILES_ACTIVE="prod"
+ENV SPRING_PROFILES_ACTIVE="local"
+ENV DB_HOST="dpg-d3mjcu49c44c73ack9m0-a.frankfurt-postgres.render.com"
+ENV DB_PORT="5432"
+ENV DB_NAME="allermind_pq5y"
+ENV SPRING_DATASOURCE_USERNAME="allermind_user"
+ENV SPRING_DATASOURCE_PASSWORD="wEIAblf8XJ87cCt89NJqEoAGeh9HqMp7"
 
 # Run the application
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]
