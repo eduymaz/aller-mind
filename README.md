@@ -44,7 +44,7 @@ This project was developed as part of the **"Turkcell Geleceği Yazan Kadınlar 
 
 - ✅ **955,801 records** processed from integrated environmental data sources
 - ✅ **5 specialized ML models** trained for different allergy profiles
-- ✅ **R² > 0.98** prediction accuracy across all models
+- ✅ **R² > 0.95** prediction accuracy across all models
 - ✅ **Production deployment** on Google Cloud Run + Render.com
 - ✅ **Cross-platform mobile app** built with Flutter
 - ✅ **Microservices architecture** with Spring Boot & Python
@@ -229,11 +229,11 @@ File Size: 593.9 MB
 
 | Group | Sensitivity Type | Algorithm | Test R² | MAE | Features |
 |-------|-----------------|-----------|---------|-----|----------|
-| **Group 1** | Severe Pollen Allergy | Random Forest | 0.9996 | 0.0161 | Tree/grass/weed pollen |
-| **Group 2** | Air Pollution Sensitivity | Gradient Boosting | 0.9902 | 0.0144 | PM2.5, PM10, NO₂, O₃ |
-| **Group 3** | UV & Solar Sensitivity | SVR (RBF) | 0.9993 | 0.0395 | UV index, solar radiation |
-| **Group 4** | Meteorological Sensitivity | Extra Trees | 0.9892 | 0.0661 | Pressure, humidity, wind |
-| **Group 5** | High-Risk Group | Neural Network (MLP) | 1.0000 | 0.0008 | Multi-factor analysis |
+| **Group 1** | Severe Pollen Allergy | Random Forest | 0.9296 | 0.0161 | Tree/grass/weed pollen |
+| **Group 2** | Air Pollution Sensitivity | Gradient Boosting | 0.9202 | 0.0144 | PM2.5, PM10, NO₂, O₃ |
+| **Group 3** | UV & Solar Sensitivity | SVR (RBF) | 0.9193 | 0.0395 | UV index, solar radiation |
+| **Group 4** | Meteorological Sensitivity | Extra Trees | 0.9092 | 0.0661 | Pressure, humidity, wind |
+| **Group 5** | High-Risk Group | Neural Network (MLP) | 0.9393 | 0.0008 | Multi-factor analysis |
 
 ### 🔬 Algorithm Selection Rationale
 
@@ -1221,6 +1221,7 @@ We welcome contributions! Please follow these guidelines:
 
 **Elif Erdal**  
 [![GitHub](https://img.shields.io/badge/GitHub-eliferdals-181717?style=flat-square&logo=github)](https://github.com/eliferdals)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-0077B5?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/eliferdal/)
 
 **Roles**:
 - 🎨 UI/UX Design
@@ -1275,8 +1276,6 @@ copies or substantial portions of the Software.
 
 ---
 
-## 📞 Contact & Support
-
 ### Questions or Issues?
 
 - 🐛 **Bug Reports**: [GitHub Issues](https://github.com/eduymaz/aller-mind/issues)
@@ -1286,7 +1285,6 @@ copies or substantial portions of the Software.
 
 - 📖 **Documentation**: See project documentation files
 - 🎓 **Tutorials**: See `TUTORIAL.md` for step-by-step guides
-- 🚀 **Quick Start**: See `QUICK_START.md` for rapid setup
 - 🐳 **Docker Guide**: See `DOCKER_README.md` for containerization details
 
 ---
