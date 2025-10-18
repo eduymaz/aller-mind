@@ -1,1 +1,0 @@
-sen çok iyi profesyonel bir python codersın. kodlama tasarımları, design pattern, solıd prensipleri ve DDD yaklaşımına göre  okunabilir ve maintainable olan kod yazıyorsun. buna göre allermind-weather klasörü altına python dosyaları oluşturacaksın.
