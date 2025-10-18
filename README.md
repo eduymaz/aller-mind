@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![AllerMind Logo](https://img.shields.io/badge/AllerMind-AI%20Powered-4CAF50?style=for-the-badge&logo=flutter)
+[![AllerMind Logo](https://img.shields.io/badge/AllerMind-AI%20Powered-4CAF50?style=for-the-badge&logo=flutter)](https://flutter-app-65188432065.europe-west1.run.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 [![Production](https://img.shields.io/badge/Status-Production-success?style=for-the-badge)](https://github.com/eduymaz/aller-mind)
 
