@@ -993,7 +993,7 @@ class _UserSelectionScreenState extends State<UserSelectionScreen> with WidgetsB
                                   'Güncel konum ve hava\nverilerine göre alerji\nrisk tahminini görün',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    fontSize: 13,
+                                    fontSize: 11,
                                     fontWeight: FontWeight.w500,
                                     color: Colors.white.withOpacity(0.9),
                                     height: 1.3,

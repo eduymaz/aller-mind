@@ -389,7 +389,7 @@ class _DetailedProfileFormScreenState extends State<DetailedProfileFormScreen> {
                     },
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: 14),
                 Expanded(
                   child: DropdownButtonFormField<String>(
                     value: _selectedGender.isEmpty ? null : _selectedGender,

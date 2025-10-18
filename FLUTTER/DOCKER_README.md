@@ -1,5 +1,20 @@
 # AllerMind Flutter Web Application
 
+### google cloud run
+docker build . --tag gcr.io/allermind/flutter-app:latest 
+docker build --platform linux/amd64 -t gcr.io/allermind/flutter-app:latest .
+
+docker save gcr.io/allermind/flutter-app:latest > flutter-app.tar
+
+
+docker run -p 8080:8080 -e PORT=8080 -e USER_PREFERENCE_SERVICE_URL="https://userpreference-app-65188432065.europe-west1.run.app" -e MODEL_SERVICE_URL="https://userpreference-app-65188432065.europe-west1.run.app" gcr.io/allermind/flutter-app
+
+### google cloud shellde
+docker load -i flutter-app.tar
+
+docker push gcr.io/allermind/flutter-app:latest
+
+
 Bu, AllerMind projesi için Flutter ile geliştirilmiş web tabanlı kullanıcı arayüzüdür.
 
 ## Özellikler

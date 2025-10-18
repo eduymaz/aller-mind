@@ -32,8 +32,10 @@ COPY --from=build /app/build/web /usr/share/nginx/html
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
-# Expose port 80
-EXPOSE 80
+# Cloud Run will set the PORT environment variable
+# Default to 8080 for local testing
+ENV PORT=8080
+EXPOSE $PORT
 
 # Use custom entrypoint
 ENTRYPOINT ["/docker-entrypoint.sh"]

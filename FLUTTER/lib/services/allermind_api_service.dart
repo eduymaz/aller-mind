@@ -2,10 +2,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/allermind_response.dart';
 import '../models/user_settings.dart';
+import '../config/app_config.dart';
 
 class AllerMindApiService {
-  // Use relative URL - nginx will proxy to model-service
-  static const String baseUrl = '';
+
+  static String get baseUrl => AppConfig().modelServiceUrl;
   static const String predictionEndpoint = '/api/v1/model/prediction';
 
   /// AllerMind model prediction'ı çağırır

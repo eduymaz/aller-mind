@@ -3,10 +3,11 @@ import 'package:http/http.dart' as http;
 import '../models/allergy_profile_request.dart';
 import '../models/allergy_classification_response.dart';
 import '../models/user_profile_response.dart';
+import '../config/app_config.dart';
+import 'allermind_api_service.dart';
 
 class AllergyClassificationService {
-  // Use relative URL - nginx will proxy to userpreference-service
-  static const String _baseUrl = '';
+  static String get _baseUrl => AppConfig().userPreferenceServiceUrl;
   static const String _classificationEndpoint = '/api/v1/allergy-classification/classify';
 
   /// Classify user's allergy profile and get group assignment
@@ -127,8 +128,9 @@ class AllergyClassificationService {
     required String userId,
   }) async {
     try {
+      // Use the full model service base URL (local development uses http://localhost:8484)
       final url = Uri.parse(
-        '/api/v1/model/prediction?lat=$latitude&lon=$longitude&userId=$userId'
+        '${AllerMindApiService.baseUrl}/api/v1/model/prediction?lat=$latitude&lon=$longitude&userId=$userId'
       );
       
       final response = await http.get(
@@ -218,7 +220,7 @@ class AllergyFormOptions {
   static const Map<String, String> genderLabels = {
     'male': 'Erkek',
     'female': 'Kadın', 
-    'other': 'Belirtmek İstemiyorum',
+    'other': 'Bilinmiyor',
   };
 
   static const List<String> clinicalDiagnoses = [

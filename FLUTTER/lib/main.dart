@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'screens/home_screen.dart';
 import 'providers/allermind_provider.dart';
+import 'config/app_config.dart';
 
 void main() {
+  // Initialize app configuration
+  AppConfig().initialize();
+  
   runApp(const AllerMindApp());
 }
 

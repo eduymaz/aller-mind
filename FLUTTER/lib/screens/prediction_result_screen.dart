@@ -348,7 +348,7 @@ class PredictionResultScreen extends StatelessWidget {
                       Icon(Icons.assignment, size: 16, color: Colors.green.shade600),
                       const SizedBox(width: 4),
                       Text(
-                        'Atama Nedeni: ${userGroup.assignmentReason}',
+                        'Gerekçe: ${userGroup.assignmentReason}',
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.green.shade600,

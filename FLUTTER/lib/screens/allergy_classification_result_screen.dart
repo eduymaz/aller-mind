@@ -789,7 +789,7 @@ class AllergyClassificationResultScreen extends StatelessWidget {
                   Icon(Icons.calculate, color: Colors.purple.shade700),
                   const SizedBox(width: 8),
                   Text(
-                    'Model Ağırlığı: ${(response.modelWeight * 100).toStringAsFixed(1)}%',
+                    'Risk Kat Sayısı: ${(response.modelWeight * 100).toStringAsFixed(1)}%',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.purple.shade700,
