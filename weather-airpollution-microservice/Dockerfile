@@ -22,12 +22,9 @@ WORKDIR /app
 # Copy the built jar from builder stage
 COPY --from=builder /build/target/*.jar app.jar
 
-# Expose the port
-EXPOSE 8383
-
 # Environment variables (hassas veriler Render'da tanımlanacak)
 ENV JAVA_OPTS="-Xmx512m -Xms256m"
-ENV SPRING_PROFILES_ACTIVE="docker"
+ENV SPRING_PROFILES_ACTIVE="prod"
 
 # Run the application
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]
