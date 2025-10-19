@@ -1,214 +1,198 @@
-# 🌟 AllerMind - Allerji Tahmin Sistemi
+# 🧠 AllerMind V2.0 - Expert Model System
 
-## 📊 Proje Özeti
+## � Genel Bakış
 
-AllerMind, 5 farklı allerji profiline sahip bireyler için özelleştirilmiş bir tahmin sistemidir. Hava durumu, hava kalitesi ve polen verilerini analiz ederek, kullanıcılara güvenli vakit geçirme süresi önerisi sunar.
+AllerMind V2.0, **598,296** kayıtlık kapsamlı veri seti üzerinde eğitilmiş uzman seviyesi allerji tahmin sistemidir. 5 farklı allerji grubu için özelleştirilmiş makine öğrenmesi modelleri ile kişiselleştirilmiş güvenli dışarıda kalma süresi tahminleri sunar.
+
+**NOT:** İşlemler MODEL/version2_pkl_models içerisindeki modeller ile yapılmıştır ancak dosya büyüklüğü nedeniyle drive'da saklanmaktadır. Aşağıda link üzerinden ulaşılabilir. Diğer kullanımda duran tüm modeller eski versiyona aittir.
 
 ## 🎯 Temel Özellikler
 
-- **5 Özelleştirilmiş Allerji Grubu** için ayrı modeller
-- **Yüksek Doğruluk**: R² > 0.99, RMSE < 0.081
-- **Kapsamlı Veri Analizi**: 175,872 satır veri
-- **Bilimsel Parametre Ağırlıklandırma**
-- **Real-time Tahmin Sistemi**
+- ✅ **5 Özelleştirilmiş Model**: Her allerji grubu için optimize edilmiş algoritmalar
+- ✅ **Kişisel Ağırlık Sistemi**: Yaş, sağlık durumu ve hassasiyet seviyesine göre ayarlanabilir tahminler
+- ✅ **Yüksek Doğruluk**: R² > 0.5, MAE < 0.1
+- ✅ **Ensemble Tahmin**: Çoklu model yaklaşımı ile güvenilir sonuçlar
+- ✅ **RESTful API**: Flask tabanlı web servisi
+
+
+## 👥 Allerji Grupları
+
+1. **Polen Hassasiyeti** - Ağaç, çimen ve yabani ot alerjileri
+2. **Hava Kirliliği** - PM2.5, PM10, NO2, Ozon hassasiyeti
+3. **UV & Güneş** - UV indeksi ve güneş maruziyeti hassasiyeti
+4. **Meteorolojik** - Basınç, nem, rüzgar hassasiyeti
+5. **Hassas Grup** - Çocuk/yaşlı, çoklu faktör hassasiyeti
+
+## 📋 Örnek Veri Formatı
+
+### Giriş Verileri
+
+| Parametre | Örnek Değer | Birim | Açıklama |
+|-----------|-------------|-------|----------|
+| `temperature_2m` | 25.0 | °C | Hava sıcaklığı |
+| `relative_humidity_2m` | 60.0 | % | Bağıl nem |
+| `pm10` | 30.0 | µg/m³ | Partikül madde (10µm) |
+| `pm2_5` | 18.0 | µg/m³ | Partikül madde (2.5µm) |
+| `uv_index` | 7.0 | - | UV indeksi |
+| `nitrogen_dioxide` | 25.0 | µg/m³ | Azot dioksit |
+| `ozone` | 80.0 | µg/m³ | Ozon seviyesi |
+| `pollen_grass_index` | 3 | 0-5 | Çimen poleni indeksi |
+| `pollen_tree_index` | 2 | 0-5 | Ağaç poleni indeksi |
+
+### Kişisel Parametreler
+
+| Parametre | Olası Değerler | Açıklama |
+|-----------|----------------|----------|
+| `age_group` | child, adult, senior | Yaş grubu |
+| `medical_condition` | healthy, asthma, copd | Sağlık durumu |
+| `activity_level` | low, moderate, high | Aktivite seviyesi |
+| `sensitivity_level` | low, moderate, high | Hassasiyet seviyesi
+
+| `sensitivity_level` | low, moderate, high | Hassasiyet seviyesi |
+
+
+### Kurulum
+
+```bash
+pip install -r requirements.txt
+```
+
+### Python Kullanımı
+
+```python
+from expert_predictor import ExpertAllermindPredictor
+
+# Predictor oluştur
+predictor = ExpertAllermindPredictor()
+
+# Çevresel veriler
+env_data = {
+    'temperature_2m': 25.0,
+    'relative_humidity_2m': 60.0,
+    'pm10': 30.0,
+    'pm2_5': 18.0,
+    'uv_index': 7.0
+}
+
+# Kişisel parametreler
+personal_params = {
+    'age_group': 'adult',
+    'medical_condition': 'healthy',
+    'activity_level': 'moderate',
+    'sensitivity_level': 'moderate'
+}
+
+# Tahmin yap
+result = predictor.predict_ensemble(env_data, personal_params)
+print(f"Güvenli süre: {result['ensemble_prediction']['safe_outdoor_hours']:.1f} saat")
+```
+
+### API Kullanımı
+
+```bash
+# API'yi başlat
+python expert_api_service.py
+
+# Tahmin isteği gönder
+curl -X POST http://localhost:5000/predict/ensemble \
+     -H 'Content-Type: application/json' \
+     -d @request.json
+```
 
 ## 📁 Dosya Yapısı
 
 ```
-DATA/ML/
-├── data_processor.py          # Veri işleme ve temizleme
-├── allergy_predictor.py       # Ana tahmin sistemi
-├── demo.py                    # Demo ve test uygulaması
-├── analysis_report.py         # Detaylı analiz raporu
-├── KULLANIM_KILAVUZU.md      # Kullanım kılavuzu
-├── README.md                  # Bu dosya
-├── cleaned_combined_data.csv  # Temizlenmiş veri
-├── allergy_analysis_report.md # Detaylı analiz raporu
-└── models/                    # Eğitilmiş modeller
-    ├── group_1_model.pkl
-    ├── group_1_scaler.pkl
-    ├── ...
-    └── group_weights.json
+[version2_pkl_models](https://drive.google.com/drive/folders/1rpT4Sf3uRztBUEqGKoubKgCXd14NcJ34?usp=sharing)/
+├── expert_predictor.py          # Ana tahmin sistemi
+├── expert_api_service.py        # Flask API servisi
+├── expert_model_creator.py      # Model eğitim scripti
+├── ensemble_config_v2.json      # Ensemble konfigürasyonu
+├── Grup1_advanced_model_v2.pkl  # Grup 1 modeli
+├── Grup2_advanced_model_v2.pkl  # Grup 2 modeli
+├── Grup3_advanced_model_v2.pkl  # Grup 3 modeli
+├── Grup4_advanced_model_v2.pkl  # Grup 4 modeli
+├── Grup5_advanced_model_v2.pkl  # Grup 5 modeli
+├── data_analysis.py             # Veri analiz araçları
+└── requirements.txt             # Bağımlılıklar
 ```
 
-## 👥 Allerji Grupları
+## 🔬 Teknik Detaylar
 
-### Grup 1: Şiddetli Alerjik Grup
-- **Polen Odağı**: %40 ağırlık
-- **Ortalama Güvenli Süre**: 1.48 saat
-- **Hassasiyet Eşiği**: 0.2
+- **Veri Seti**: 598,296 kayıt, 44 özellik
+- **Eğitim/Test Oranı**: 80/20
+- **Feature Engineering**: 8 yeni türetilmiş özellik
+- **Normalizasyon**: StandardScaler
+- **Hiperparametre Optimizasyonu**: GridSearchCV
 
-### Grup 2: Hafif-Orta Grup
-- **Dengeli Yaklaşım**: Polen %30, Hava Kalitesi %30, Hava Durumu %40
-- **Ortalama Güvenli Süre**: 4.21 saat
-- **Hassasiyet Eşiği**: 0.4
+## 📖 Dokümantasyon
 
-### Grup 3: Olası Alerjik/Genetik
-- **Polen Odağı**: %35 ağırlık
-- **Ortalama Güvenli Süre**: 2.38 saat
-- **Hassasiyet Eşiği**: 0.3
+- **[Detaylı Tutorial](EXPERT_MODEL_TUTORIAL.md)**: Sistem mimarisi ve algoritma detayları
+- **[Flutter API](flutter_api_service.py)**: Mobil uygulama entegrasyonu
 
-### Grup 4: Teşhis Almamış
-- **Temkinli Yaklaşım**: Hava kalitesi %35 ağırlık
-- **Ortalama Güvenli Süre**: 5.71 saat
-- **Hassasiyet Eşiği**: 0.5
+## 🤝 Destek
 
-### Grup 5: Hassas Grup (Çocuk/Yaşlı)
-- **Hava Kalitesi Odağı**: %45 ağırlık
-- **Ortalama Güvenli Süre**: 6.23 saat
-- **Hassasiyet Eşiği**: 0.6
-
-## 🚀 Hızlı Başlangıç
-
-### 1. Bağımlılıkları Yükle
-```bash
-pip install pandas numpy scikit-learn matplotlib seaborn
-```
-
-### 2. Demo Çalıştır
-```bash
-cd DATA/ML
-python demo.py
-```
-
-### 3. Temel Kullanım
-```python
-from allergy_predictor import AllergyGroupPredictor
-
-# Predictor oluştur ve modelleri yükle
-predictor = AllergyGroupPredictor()
-
-# Giriş verisi hazırla
-input_data = {
-    'temperature_2m': 25,
-    'relative_humidity_2m': 60,
-    'pm10': 20,
-    'pm2_5': 12,
-    'upi_value': 2,
-    'pollen_code': 'GRASS',
-    'in_season': True,
-    # ... diğer parametreler
-}
-
-# Tahmin yap (Grup 1 için)
-result = predictor.predict_safe_time(input_data, group_id=1)
-print(f"Güvenli süre: {result['predicted_safe_hours']} saat")
-print(f"Öneri: {result['recommendation']}")
-```
-
-## 📊 Model Performansı
-
-| Grup | Model R² | RMSE | Ortalama Güvenli Süre |
-|------|----------|------|----------------------|
-| 1    | 1.000    | 0.047| 1.48 saat           |
-| 2    | 0.997    | 0.081| 4.21 saat           |
-| 3    | 1.000    | 0.049| 2.38 saat           |
-| 4    | 0.992    | 0.051| 5.71 saat           |
-| 5    | 0.994    | 0.020| 6.23 saat           |
-
-## 🧪 Test Senaryoları
-
-### İdeal Hava Koşulları
-- **En İyi Performans**: Grup 4 (7.36 saat)
-- **En Kısıtlı**: Grup 1 (5.93 saat)
-- **Risk Seviyesi**: Tüm gruplar düşük
-
-### Yüksek Polen Sezonu
-- **En İyi Performans**: Grup 4 (5.84 saat)
-- **En Kısıtlı**: Grup 1 (0.0 saat)
-- **Risk Seviyesi**: Grup 1,3 kritik
-
-### Kötü Hava Kalitesi
-- **En İyi Performans**: Grup 5 (6.38 saat)
-- **En Kısıtlı**: Grup 1 (0.0 saat)
-- **Risk Seviyesi**: Yüksek
-
-## 🛠️ Sistem Mimarisi
-
-### Veri İşleme Katmanı
-- **Veri Kaynaklarını Birleştirme**: 3 günlük veri (30-31 Ağustos, 1 Eylül)
-- **Veri Temizleme**: Eksik değer işleme, outlier tespiti
-- **Özellik Mühendisliği**: Kategorik encoding, zaman özellikleri
-
-### Model Katmanı
-- **Algoritma**: Random Forest Regressor
-- **Grup Bazlı Modeller**: Her grup için ayrı model
-- **Parametre Ağırlıklandırma**: Bilimsel temelli ağırlıklar
-
-### Tahmin Katmanı
-- **Risk Skoru Hesaplama**: Polen, hava kalitesi, hava durumu
-- **Güvenli Süre Tahmini**: Grup hassasiyetine göre
-- **Öneri Sistemi**: Risk seviyesine göre öneriler
-
-## 📈 Analiz Sonuçları
-
-### Önemli Bulgular
-1. **Şiddetli alerjik grup** en kısıtlı yaşam koşullarına sahip
-2. **Polen mevsimi** kritik risk faktörü
-3. **Hava kalitesi** tüm gruplar için önemli
-4. **Hassas grup** paradoksal olarak en toleranslı
-
-### İstatistiksel Özetler
-- **Ortalama Güvenli Süre**: 4.00 saat
-- **Risk Skoru Aralığı**: 0.128 - 0.720
-- **En Yüksek Varyasyon**: Grup 1 (0-7.36 saat)
-
-## 🔧 Gelişmiş Özellikler
-
-### Özellik Önem Analizi
-```python
-from demo import AllergyPredictionDemo
-demo = AllergyPredictionDemo()
-demo.analyze_feature_importance()
-```
-
-### Grup Karşılaştırması
-```python
-# Tüm gruplar için karşılaştırma
-demo.compare_all_groups(input_data)
-```
-
-### İnteraktif Tahmin
-```python
-# Kullanıcı girişi ile tahmin
-demo.interactive_prediction()
-```
-
-## 📚 Dokümantasyon
-
-- **[Kullanım Kılavuzu](https://github.com/eduymaz/aller-mind/blob/main/DATA/ML/KULLANIM_KILAVUZU.md)**: Detaylı kullanım talimatları
-- **[Analiz Raporu](https://github.com/eduymaz/aller-mind/blob/main/DATA/ML/allergy_analysis_report.md)**: Kapsamlı analiz sonuçları
-
-## 🔮 Gelecek Geliştirmeler
-
-- [ ] Coğrafi mikro-iklim analizi
-- [ ] Wearable cihaz entegrasyonu
-
-## 🤝 Katkıda Bulunma
-
-1. Repository'yi fork edin
-2. Feature branch oluşturun (`git checkout -b feature/AmazingFeature`)
-3. Commit yapın (`git commit -m 'Add some AmazingFeature'`)
-4. Branch'i push edin (`git push origin feature/AmazingFeature`)
-5. Pull Request oluşturun
-
-## 📄 Lisans
-
-Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
-
-## 📞 İletişim
-
-- **Proje Sahibi**: Elif Duymaz Yilmaz
-- **E-posta**: duyymazelif@gmail.com
-- **GitHub**: [GitHub Repository](https://github.com/eduymaz/aller-mind/)
-
-## 🙏 Teşekkürler
-
-- OpenWeather API
-- Google Pollen API
-- Scikit-learn Topluluğu
-- Pandas Geliştiricileri
+Sorularınız için: duyymazelif@gmail.com
 
 ---
 
-*🌟 AllerMind ile daha sağlıklı, bilinçli ve güvenli günler!*
+*🌟 AllerMind V2.0 - Kişiselleştirilmiş allerji yönetimi için bilimsel yaklaşım*
+curl http://localhost:5000/models/info
+```
+
+### 📋 API Endpoints
+
+- `GET /health` - Sistem sağlığı
+- `POST /predict/ensemble` - Ana tahmin endpoint'i
+- `POST /predict/group/<id>` - Tek grup tahmini
+- `POST /predict/batch` - Batch tahminler
+- `GET /predict/demo` - Demo tahminler
+- `GET /models/info` - Model bilgileri
+
+### 🎛️ Kişisel Ağırlık Sistemi
+
+#### Yaş Grupları
+- `child` (1.5x) - Çocuklar için arttırılmış hassasiyet
+- `adult` (1.0x) - Standart yetişkin hassasiyeti
+- `elderly` (1.3x) - Yaşlılar için arttırılmış hassasiyet
+
+#### Tıbbi Durum
+- `healthy` (1.0x) - Sağlıklı birey
+- `allergy` (1.2x) - Alerji hastası
+- `asthma` (1.4x) - Astım hastası
+
+#### Aktivite Seviyesi
+- `low` (0.9x) - Düşük aktivite
+- `moderate` (1.0x) - Orta aktivite
+- `high` (1.2x) - Yüksek aktivite
+
+#### Hassasiyet Seviyesi
+- `low` (0.8x) - Düşük hassasiyet
+- `moderate` (1.0x) - Orta hassasiyet
+- `high` (1.3x) - Yüksek hassasiyet
+- `very_high` (1.6x) - Çok yüksek hassasiyet
+
+### 📚 Detaylı Dokümantasyon
+
+Sistem hakkında detaylı bilgi için `EXPERT_MODEL_TUTORIAL.md` dosyasına bakınız.
+
+### 🔬 Teknik Detaylar
+
+- **Veri Boyutu**: 598,296 kayıt, 44 özellik
+- **Eğitim Periyodu**: 2025-08-30 - 2025-09-11
+- **Algoritma Çeşitliliği**: 5 farklı ML algoritması
+- **Feature Engineering**: 5 yeni özellik oluşturuldu
+- **Validation**: Time-aware train-test split
+- **Scaling**: RobustScaler (outlier'lara dayanıklı)
+
+### 🏆 Başarı Metrikleri
+
+- ✅ Tüm modellerde R² > 0.90
+- ✅ Düşük overfitting (gap < 0.01)
+- ✅ Hızlı tahmin süresi (< 100ms)
+- ✅ Production-ready kod kalitesi
+- ✅ Comprehensive error handling
+- ✅ Personal weighting integration
+
+
+
+**ALLERMIND V2.0** - *Expert-level machine learning ile geliştirilmiş alerji tahmin sistemi*
