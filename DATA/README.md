@@ -25,6 +25,8 @@ AllerMind V2.0, **598,296** kayıtlık kapsamlı veri seti üzerinde eğitilmiş
 
 ## 📋 Örnek Veri Formatı
 
+Not: Model geliştirme sürecinde 44 farklı parametre kullanılmıştır. Aşağıdaki veri tabloları örnek amaçlı küçültürelek sunulmuştur.
+
 ### Giriş Verileri
 
 | Parametre | Örnek Değer | Birim | Açıklama |
@@ -101,7 +103,7 @@ curl -X POST http://localhost:5000/predict/ensemble \
 
 ## 📁 Dosya Yapısı
 
-Veriler için [tıklayınız.](https://drive.google.com/drive/folders/1rpT4Sf3uRztBUEqGKoubKgCXd14NcJ34?usp=sharing)
+Modeller için [tıklayınız.](https://drive.google.com/drive/folders/1rpT4Sf3uRztBUEqGKoubKgCXd14NcJ34?usp=sharing)
 ```
 version2_pkl_models/
 ├── expert_predictor.py          # Ana tahmin sistemi
@@ -129,16 +131,12 @@ version2_pkl_models/
 
 - **[Detaylı Tutorial](EXPERT_MODEL_TUTORIAL.md)**: Sistem mimarisi ve algoritma detayları
 - **[Flutter API](flutter_api_service.py)**: Mobil uygulama entegrasyonu
+- **Uygulamaya Gitmek için [tıklayınız](https://flutter-app-65188432065.europe-west1.run.app/)**
 
-## 🤝 Destek
+## 🤝 Destek / Öneri
 
-Sorularınız için: duyymazelif@gmail.com
-
+Sorularınız için: duyymazelif@gmail.com adresine e-mail atabilirsiniz.
 ---
-
-*🌟 AllerMind V2.0 - Kişiselleştirilmiş allerji yönetimi için bilimsel yaklaşım*
-curl http://localhost:5000/models/info
-```
 
 ### 📋 API Endpoints
 
