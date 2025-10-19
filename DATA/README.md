@@ -101,8 +101,9 @@ curl -X POST http://localhost:5000/predict/ensemble \
 
 ## 📁 Dosya Yapısı
 
+Veriler için [tıklayınız.](https://drive.google.com/drive/folders/1rpT4Sf3uRztBUEqGKoubKgCXd14NcJ34?usp=sharing)
 ```
-[version2_pkl_models](https://drive.google.com/drive/folders/1rpT4Sf3uRztBUEqGKoubKgCXd14NcJ34?usp=sharing)/
+version2_pkl_models/
 ├── expert_predictor.py          # Ana tahmin sistemi
 ├── expert_api_service.py        # Flask API servisi
 ├── expert_model_creator.py      # Model eğitim scripti
